@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VerbumECC-Criar Diocese</title>
+    <!-- Chamada do arquivo CSS -->
+    <link rel="stylesheet" type="text/css" href="/verbum-ecc/css/create_diocese.css">
+
+    <script>
+        async function createDiocese(event) {
+            event.preventDefault(); // Previne o comportamento padrão do formulário
+
+            const nome = document.getElementById('nome').value;
+            const cidade = document.getElementById('cidade').value;
+            const estado = document.getElementById('estado').value;
+            const isActive = document.getElementById('isActive').checked;
+
+            const response = await fetch('http://localhost:8080/verbum-ecc/v1/diocese/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nome: nome,
+                    cidade: cidade,
+                    estado: estado,
+                    isActive: isActive
+                })
+            });
+
+            if (response.ok) {
+                alert('Diocese created successfully!');
+            } else {
+                alert('Failed to create diocese.');
+            }
+        }
+
+        function cancel() {
+            window.location.href = '/verbum-ecc/v1/home'; // Redireciona para a página inicial logada
+        }
+
+        function clear() {
+            document.getElementById('nome').value = '';
+            document.getElementById('cidade').value = '';
+            document.getElementById('estado').value = '';
+            document.getElementById('isActive').checked = false;
+        }
+    </script>
+</head>
+<body>
+<div data-include-html="/verbum-ecc/navbar.html"></div>
+<h1>Criar Nova Diocese</h1>
+<form onsubmit="createDiocese(event)">
+    <div>
+        <label for="nome">Nome Diocese:</label>
+        <input type="text" id="nome" required />
+    </div>
+    <div>
+        <label for="cidade">Cidade sede:</label>
+        <input type="text" id="cidade" required />
+    </div>
+    <div>
+        <label for="estado">Estado:</label>
+        <input type="text" id="estado" required />
+    </div>
+<!--    <div class="form-check">-->
+<!--        <input type="checkbox" class="form-check-input" id="isActive">-->
+<!--        <label class="form-check-label" for="isActive">Está Ativa?</label>-->
+<!--    </div>-->
+    <div>
+        <button type="submit">Create</button>
+        <button type="reset" class="btn-clear" onclick="clear()"> Limpar </button>
+        <button type="button" class="btn-cancel" onclick="cancel()"> Cancelar </button>
+    </div>
+</form>
+<div data-include-html="/verbum-ecc/footer.html"></div>
+</body>
+</html>

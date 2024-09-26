@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Setores Ativos</title>
+    <link rel="stylesheet" type="text/css" href="/verbum-ecc/css/create_diocese.css">
+    <script>
+        async function fetchSetores() {
+            try {
+                const response = await fetch('http://localhost:8080/verbum-ecc/v1/setorial/all/isActive=true');
+                if (response.ok) {
+                    const setores = await response.json();
+                    const tableBody = document.getElementById('setorTableBody');
+                    setores.forEach(setor => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${setor.nome}</td>
+                            <td>
+                                <button onclick="editSetor('${setor.id}')">Editar</button>
+                                <button onclick="deleteSetor('${setor.id}')">Excluir</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    console.error('Failed to fetch setores');
+                }
+            } catch (error) {
+                console.error('Error fetching setores:', error);
+            }
+        }
+
+        function createSetor() {
+            window.location.href = '/verbum-ecc/v1/setor/form';
+        }
+
+        function editSetor(id) {
+            window.location.href = `/verbum-ecc/v1/setor/form/${id}`;
+        }
+
+        async function deleteSetor(id) {
+            if (confirm('Tem certeza que deseja excluir este setor?')) {
+                try {
+                    const response = await fetch(`http://localhost:8080/verbum-ecc/v1/setorial/${id}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        alert('Setor excluído com sucesso!');
+                        location.reload();
+                    } else {
+                        alert('Falha ao excluir setor.');
+                    }
+                } catch (error) {
+                    console.error('Error deleting setor:', error);
+                }
+            }
+        }
+
+        function cancel() {
+            window.location.href = '/verbum-ecc/v1/home';
+        }
+
+        document.addEventListener('DOMContentLoaded', fetchSetores);
+    </script>
+</head>
+<body>
+
+<h1>Setores</h1>
+<div class="button-container">
+    <button class="create-button" onclick="createSetor()">Criar Novo Setor</button>
+    <button type="button" class="btn-cancel" onclick="cancel()">Cancelar</button>
+</div>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody id="setorTableBody">
+        <!-- Setores serão carregados aqui -->
+    </tbody>
+</table>
+</body>
+</html>
