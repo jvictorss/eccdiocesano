@@ -1,10 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="/verbum-ecc/css/login.css">
+    <script>
+        async function authenticateUser(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            try {
+                const response = await fetch('/verbum-ecc/v1/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, senha: senha })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('jwtToken', data.token);
+                    window.location.href = '/verbum-ecc/v1/home';
+                } else {
+                    alert('Login failed. Please check your credentials and try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            }
+        }
+    </script>
 </head>
 <body>
-$END$
+
+<div id="main-container">
+    <img src="/verbum-ecc/images/verbum_logo.png" alt="Verbum Software">
+    <form onsubmit="authenticateUser(event)">
+        <div>
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required>
+        </div>
+        <button type="submit">Login</button>
+        <a href="/verbum-ecc/v1/esqueci-minha-senha">Esqueci minha senha</a>
+    </form>
+</div>
+<div id="footer"></div>
+<script>
+    function loadFooter() {
+        fetch('/verbum-ecc/v1/footer')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            });
+    }
+
+    window.onload = function() {
+        loadFooter();
+    };
+</script>
 </body>
 </html>

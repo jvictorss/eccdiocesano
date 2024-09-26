@@ -4,167 +4,14 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: "Poppins", "Arial", serif;
+    /*font-family: "Poppins", "Arial", serif;*/
     text-decoration: none;
-}
-
-main {
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-table {
-    width: 90%;
-    border-collapse: collapse;
-    margin: 20px auto;
-    font-size: 16px;
-    text-align: left;
-}
-
-table thead tr {
-    background-color: #8f8d8d;
-    color: #ffffff;
-    text-align: left;
-    font-weight: bold;
-}
-
-table th, table td {
-    padding: 12px 15px;
-    border: 1px solid #dddddd;
-}
-
-table tbody tr {
-    border-bottom: 1px solid #dddddd;
-}
-
-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
-}
-
-table tbody tr:last-of-type {
-    border-bottom: 2px solid #8f8d8d;
-}
-
-table tbody tr:hover {
-    background-color: #f1f1f1;
-}
-
-.button-container {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.button-container button {
-    padding: 10px 20px;
-    background-color: #008000FF;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.button-container button:hover {
-    background-color: #4e4e4e;
-    color: #ffffff;
-}
-
-.button.delete:hover {
-    background-color: #FF0000;
-}
-
-.button-container {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-    margin-bottom: 20px;
-    padding-right: 5%;
-}
-
-.create-button {
-    padding: 10px 20px;
-    background-color: #008000FF;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.create-button:hover {
-    background-color: #4e4e4e;
-    color: #ffffff;
-}
-
-button {
-    padding: 5px 10px;
-    margin: 0 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #4e4e4e;
-    color: #ffffff;
-}
-
-button.edit {
-    background-color: #008000FF;
-    color: #ffffff;
-}
-
-button.delete {
-    background-color: #FF0000;
-    color: #ffffff;
+    font-family: Arial, sans-serif;
+    background-color: #efefef;
 }
 
 body {
-    background: #fafafa;
-}
-
-nav {
-    display: flex;
-    justify-content: space-between;
-    width: 100vw;
-    font-size: 20px;
-    padding: 10px 30px;
-    background: #000;
-    color: #fff;
-}
-
-nav p {
-    margin-top: 5px;
-}
-
-nav form {
-    width: 10%;
-}
-
-nav form input {
-    width: 100%;
-    height: 100%;
-    padding: 5px 0;
-    outline: 0;
-    color: #000;
-    border: 1px solid #fff;
-    background: #fff;
-    font-size: 14px;
-    border-radius: 5px;
-    transition: 0.3s ease;
-    cursor: pointer;
-}
-
-nav form input:hover {
-    background: #4e4e4e;
-    border-color: #4e4e4e;
-    color: #fff;
+    background: #efefef;
 }
 
 main {
@@ -185,26 +32,26 @@ main {
 
 h1 {
     text-align: center;
-    width: 100%; /* Garante que o h1 ocupe toda a largura do contêiner */
-    margin-bottom: 20px; /* Adiciona um espaço abaixo do h1 */
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 form {
-    width: 50%; /* Ajuste a largura do formulário */
-    max-width: 500px; /* Defina uma largura máxima */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto; /* Centraliza o formulário horizontalmente */
-    padding: 20px; /* Adiciona um pouco de padding */
-    background: #fff; /* Adiciona um fundo branco */
-    border-radius: 10px; /* Adiciona bordas arredondadas */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra */
+    width: 100%;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    font-family: "Poppins", "Arial", serif;
+    gap: 20px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 form div {
     width: 100%;
-    margin-bottom: 15px;
 }
 
 form label {
@@ -213,10 +60,10 @@ form label {
     font-size: 16px;
 }
 
-form input[type="text"], form input[type="checkbox"] {
+form input[type="text"], form input[type="email"], form input[type="date"], form input[type="number"], form input[type="checkbox"], form select {
     width: 100%;
-    padding: 5px; /* Reduz o padding */
-    font-size: 14px; /* Reduz o tamanho da fonte */
+    padding: 10px;
+    font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -231,13 +78,28 @@ form button {
     transition: 0.3s ease;
 }
 
+form button.voltar {
+    color: #fff;
+    background: #808080;
+    cursor: pointer;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #808080;
+    transition: 0.3s ease;
+}
+
 form button:hover {
     background: #fff;
     color: #008000FF;
 }
 
+form button.voltar:hover {
+    background: #fff;
+    color: #808080;
+}
+
 form button.btn-clear {
-    background: #afaf60; /* Amarelo claro */
+    background: #afaf60;
     border: 1px solid #FFFFE0;
     color: #000;
 }
@@ -248,20 +110,8 @@ form button.btn-clear:hover {
     color: #000;
 }
 
-button.btn-cancel {
-    background: #FF0000; /* Vermelho */
-    border: 1px solid #FF0000;
-    color: #fff;
-}
-
-button.btn-cancel:hover {
-    background: #fff;
-    border-color: #FF0000;
-    color: #FF0000;
-}
-
 form button.btn-cancel {
-    background: #FF0000; /* Vermelho */
+    background: #FF0000;
     border: 1px solid #FF0000;
     color: #fff;
 }
@@ -272,70 +122,43 @@ form button.btn-cancel:hover {
     color: #FF0000;
 }
 
-@media only screen and (max-width: 1100px) {
-    #main-container {
-        width: 90%;
-    }
+.grid-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Espaço entre os itens */
+    justify-content: space-between;
 }
+
+.grid-section > div {
+    flex: 1 1 45%; /* Ocupar 45% da largura disponível */
+    min-width: 200px; /* Largura mínima para garantir que caiba o conteúdo */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espaço entre as seções */
+}
+
+button {
+    margin-right: 10px; /* Espaço entre os botões */
+}
+
+footer {
+    /*font-family: "Poppins", "Arial", serif;*/
+    font-family: Arial, sans-serif;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    /*background-color: #efefef;*/
+    color: black;
+    text-align: center;
+}
+
 
 @media only screen and (max-width: 900px) {
-    nav {
-        font-size: 18px;
-    }
-
-    nav form {
-        width: 20%;
-    }
-
     form {
-        width: 70%; /* Ajuste a largura do formulário para telas menores */
-    }
-
-    form label {
-        font-size: 15px;
-    }
-
-    form input[type="text"], form input[type="checkbox"] {
-        font-size: 15px;
-    }
-}
-
-@media only screen and (max-width: 650px) {
-    #main-container {
-        width: 95%;
-    }
-
-    form {
-        width: 90%; /* Ajuste a largura do formulário para telas menores */
-    }
-
-    form label {
-        font-size: 14px;
-    }
-
-    form input[type="text"], form input[type="checkbox"] {
-        font-size: 14px;
-    }
-
-    form button {
-        font-size: 14px;
-    }
-}
-
-@media only screen and (max-width: 450px) {
-    nav {
-        font-size: 12px;
-    }
-
-    form label {
-        font-size: 12px;
-    }
-
-    form input[type="text"], form input[type="checkbox"] {
-        font-size: 12px;
-    }
-
-    form button {
-        font-size: 12px;
+        grid-template-columns: 1fr;
     }
 }

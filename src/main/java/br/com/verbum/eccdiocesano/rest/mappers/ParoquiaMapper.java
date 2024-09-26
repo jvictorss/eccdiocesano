@@ -1,7 +1,9 @@
 package br.com.verbum.eccdiocesano.rest.mappers;
 
 import br.com.verbum.eccdiocesano.domain.entities.Diocese;
+import br.com.verbum.eccdiocesano.domain.entities.Paroquia;
 import br.com.verbum.eccdiocesano.rest.dtos.DioceseDto;
+import br.com.verbum.eccdiocesano.rest.dtos.ParoquiaDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -10,32 +12,33 @@ import java.util.List;
 
 @Component
 @AllArgsConstructor
-public class DioceseMapper {
+public class ParoquiaMapper {
 
-    public Diocese mapToEntity(DioceseDto dioceseDto) {
-        return Diocese.builder()
-                .nomeDiocese(dioceseDto.getNome())
-                .cidadeDiocese(dioceseDto.getCidade())
-                .estadoDiocese(dioceseDto.getEstado())
-                .isActive(dioceseDto.getIsActive())
-                .createdByUser("SYSTEM")
-                .createdAt(OffsetDateTime.now())
-                .updatedAt(OffsetDateTime.now())
+    public Paroquia mapToEntity(ParoquiaDto paroquiaDto) {
+        return Paroquia.builder()
+                .nome(paroquiaDto.getNome())
+                .cidade(paroquiaDto.getCidade())
+                .estado(paroquiaDto.getEstado())
+                .idSetor(paroquiaDto.getIdSetor())
+                .idDiocese(paroquiaDto.getIdDiocese())
+                .isActive(paroquiaDto.getIsActive())
                 .build();
     }
 
-    public DioceseDto mapToDto(Diocese diocese) {
-        return DioceseDto.builder()
-                .id(diocese.getId())
-                .nome(diocese.getNomeDiocese())
-                .cidade(diocese.getCidadeDiocese())
-                .estado(diocese.getEstadoDiocese())
-                .isActive(diocese.getIsActive())
+    public ParoquiaDto mapToDto(Paroquia paroquia) {
+        return ParoquiaDto.builder()
+                .id(paroquia.getId())
+                .nome(paroquia.getNome())
+                .cidade(paroquia.getCidade())
+                .estado(paroquia.getEstado())
+                .idSetor(paroquia.getIdSetor())
+                .idDiocese(paroquia.getIdDiocese())
+                .isActive(paroquia.getIsActive())
                 .build();
     }
 
-    public List<DioceseDto> mapToDto(List<Diocese> dioceses) {
-        return dioceses.stream()
+    public List<ParoquiaDto> mapToDto(List<Paroquia> paroquias) {
+        return paroquias.stream()
                 .map(this::mapToDto)
                 .toList();
     }
