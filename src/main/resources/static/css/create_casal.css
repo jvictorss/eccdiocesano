@@ -6,8 +6,9 @@
     box-sizing: border-box;
     /*font-family: "Poppins", "Arial", serif;*/
     text-decoration: none;
-    font-family: Arial, sans-serif;
-    background-color: #efefef;
+    /*font-family: Arial, sans-serif;*/
+    /*background-color: #efefef;*/
+    font-family: "Poppins", "Arial", serif;
 }
 
 body {
@@ -41,13 +42,13 @@ form {
     max-width: 1200px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    font-family: "Poppins", "Arial", serif;
     gap: 20px;
     margin: 0 auto;
     padding: 20px;
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
 }
 
 form div {
@@ -151,7 +152,7 @@ footer {
     left: 0;
     bottom: 0;
     width: 100%;
-    /*background-color: #efefef;*/
+    background-color: #efefef;
     color: black;
     text-align: center;
 }

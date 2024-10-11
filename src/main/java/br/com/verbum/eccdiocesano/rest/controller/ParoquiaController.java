@@ -1,6 +1,7 @@
 package br.com.verbum.eccdiocesano.rest.controller;
 
 import br.com.verbum.eccdiocesano.domain.services.ParoquiaService;
+import br.com.verbum.eccdiocesano.exception.BusinessException;
 import br.com.verbum.eccdiocesano.rest.dtos.DioceseDto;
 import br.com.verbum.eccdiocesano.rest.dtos.ParoquiaDto;
 import lombok.AllArgsConstructor;
@@ -45,7 +46,7 @@ public class ParoquiaController {
     }
 
     @DeleteMapping("/{paroquiaId}")
-    public ResponseEntity<Void> deleteParoquia(@PathVariable UUID paroquiaId) {
+    public ResponseEntity<Void> deleteParoquia(@PathVariable UUID paroquiaId) throws BusinessException {
 
         service.deleteParoquia(paroquiaId);
 

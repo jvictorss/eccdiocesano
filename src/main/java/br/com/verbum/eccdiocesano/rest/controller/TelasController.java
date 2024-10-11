@@ -59,7 +59,7 @@ public class TelasController {
 
     @GetMapping("/v1/casal/view/{id}")
     public String showViewCasalForm(@PathVariable("id") UUID id) {
-        return "casal_view";
+        return "casal_visualizacao";
     }
 
     @GetMapping("/v1/login")
@@ -79,7 +79,7 @@ public class TelasController {
 
     @GetMapping("/v1/js")
     public String showJs() {
-        return "functions";
+        return "/scripts/functions";
     }
 
     @GetMapping("/v1/footer")

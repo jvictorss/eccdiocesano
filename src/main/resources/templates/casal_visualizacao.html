@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizar Casal</title>
+    <link rel="stylesheet" type="text/css" href="/verbum-ecc/css/create_casal.css">
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.7-beta.19/jquery.inputmask.min.js"></script>-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/verbum-ecc/js/functions.js"></script>
+</head>
+<body>
+<div id="navbar" th:replace="~{fragments/navbar :: navbar}"></div>
+<div>
+    <h1>Visualizar Cadastro de Casal</h1>
+    <form>
+    <input type="hidden" id="idCasal" th:value="${casal.id}" />
+    <!-- Seção Ele -->
+    <h3>Dados Ele</h3>
+    <div class="grid-section">
+        <div>
+            <label for="nomeEsposo">Nome do Esposo:</label>
+            <input type="text" id="nomeEsposo" th:value="${casal.ele.nome}" readonly />
+        </div>
+        <div>
+            <label for="apelidoEsposo">Apelido do Esposo:</label>
+            <input type="text" id="apelidoEsposo" th:value="${casal.ele.apelido}" readonly />
+        </div>
+        <div>
+            <label for="telefoneEsposo">Telefone do Esposo:</label>
+            <input type="text" id="telefoneEsposo" th:value="${casal.ele.telefone}" readonly />
+        </div>
+        <div>
+            <label for="emailEsposo">Email do Esposo:</label>
+            <input type="email" id="emailEsposo" th:value="${casal.ele.email}" readonly />
+        </div>
+        <div>
+            <label for="cpfEsposo">CPF do Esposo:</label>
+            <input type="text" id="cpfEsposo" th:value="${casal.ele.cpf}" readonly />
+        </div>
+        <div>
+            <label for="dataNascimentoEsposo">Data de Nascimento do Esposo:</label>
+            <input type="date" id="dataNascimentoEsposo" th:value="${casal.ele.dataNascimento}" readonly />
+        </div>
+    </div>
+
+    <!-- Seção Ela -->
+    <h3>Dados Ela</h3>
+    <div class="grid-section">
+        <div>
+            <label for="nomeEsposa">Nome da Esposa:</label>
+            <input type="text" id="nomeEsposa" th:value="${casal.ela.nome}" readonly />
+        </div>
+        <div>
+            <label for="apelidoEsposa">Apelido da Esposa:</label>
+            <input type="text" id="apelidoEsposa" th:value="${casal.ela.apelido}" readonly />
+        </div>
+        <div>
+            <label for="telefoneEsposa">Telefone da Esposa:</label>
+            <input type="text" id="telefoneEsposa" th:value="${casal.ela.telefone}" readonly />
+        </div>
+        <div>
+            <label for="emailEsposa">Email da Esposa:</label>
+            <input type="email" id="emailEsposa" th:value="${casal.ela.email}" readonly />
+        </div>
+        <div>
+            <label for="cpfEsposa">CPF da Esposa:</label>
+            <input type="text" id="cpfEsposa" th:value="${casal.ela.cpf}" readonly />
+        </div>
+        <div>
+            <label for="dataNascimentoEsposa">Data de Nascimento da Esposa:</label>
+            <input type="date" id="dataNascimentoEsposa" th:value="${casal.ela.dataNascimento}" readonly />
+        </div>
+    </div>
+
+    <!-- Seção Casal -->
+    <h3>Dados do casal</h3>
+    <div class="grid-section">
+        <div>
+            <label for="dataCasamentoReligioso">Data do Casamento Religioso:</label>
+            <input type="date" id="dataCasamentoReligioso" th:value="${casal.dataCasamentoReligioso}" readonly />
+        </div>
+        <div>
+            <label for="dataCasamentoCivil">Data do Casamento Civil:</label>
+            <input type="date" id="dataCasamentoCivil" th:value="${casal.dataCasamentoCivil}" readonly />
+        </div>
+    </div>
+    <div class="grid-section">
+        <div>
+            <label for="endereco">Endereço:</label>
+            <input type="text" id="endereco" th:value="${casal.endereco}" readonly />
+        </div>
+        <div>
+            <label for="bairro">Bairro:</label>
+            <input type="text" id="bairro" th:value="${casal.bairro}" readonly />
+        </div>
+        <div>
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" th:value="${casal.cidade}" readonly />
+        </div>
+        <div>
+            <label for="estado">Estado:</label>
+            <input type="text" id="estado" th:value="${casal.estado}" readonly />
+        </div>
+    </div>
+    <div class="grid-section">
+        <div>
+            <label for="paroquiaEcc">Paróquia ECC:</label>
+            <input type="text" id="paroquiaEcc" readonly />
+        </div>
+        <div>
+            <label for="paroquiaAtual">Paróquia Atual:</label>
+            <input type="text" id="paroquiaAtual" readonly />
+        </div>
+        <div>
+            <label for="idSetor">Setorial:</label>
+            <input type="text" id="idSetor" readonly />
+        </div>
+        <div>
+            <label for="idDiocese">Diocese:</label>
+            <input type="text" id="idDiocese" readonly />
+        </div>
+    </div>
+    <div class="grid-section">
+        <div>
+            <label for="dataPrimeiraEtapa">Data da Primeira Etapa:</label>
+            <input type="date" id="dataPrimeiraEtapa" th:value="${casal.dataPrimeiraEtapa}" readonly />
+        </div>
+        <div>
+            <label for="dataSegundaEtapa">Data da Segunda Etapa:</label>
+            <input type="date" id="dataSegundaEtapa" th:value="${casal.dataSegundaEtapa}" readonly />
+        </div>
+        <div>
+            <label for="dataTerceiraEtapa">Data da Terceira Etapa:</label>
+            <input type="date" id="dataTerceiraEtapa" th:value="${casal.dataTerceiraEtapa}" readonly />
+        </div>
+        <div>
+            <label for="isActive">Ativo:</label>
+            <input type="checkbox" id="isActive" th:checked="${casal.isActive}" disabled />
+        </div>
+    </div>
+<!--    <button class="voltar" onclick="window.location.href = '/verbum-ecc/v1/casal/view'">Voltar</button>-->
+        <button type="button" class="voltar" onclick="cancel()">Voltar</button>
+</form>
+</div>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+
+
+    async function fetchParoquiaName(paroquiaId) {
+        try {
+            const response = await fetch(`http://localhost:8080/verbum-ecc/v1/paroquia/${paroquiaId}`);
+            if (response.ok) {
+                const paroquia = await response.json();
+                return paroquia.nome;
+            } else {
+                console.error('Failed to fetch paróquia name');
+                return 'Unknown';
+            }
+        } catch (error) {
+            console.error('Error fetching paróquia name:', error);
+            return 'Unknown';
+        }
+    }
+
+    async function fetchSetorName(setorId) {
+        try {
+            const response = await fetch(`http://localhost:8080/verbum-ecc/v1/setorial/${setorId}`);
+            if (response.ok) {
+                const setor = await response.json();
+                return setor.nome;
+            } else {
+                console.error('Failed to fetch setor name');
+                return 'Tá difícil';
+            }
+        } catch (error) {
+            console.error('Error fetching setor name:', error);
+            return 'Unknown';
+        }
+    }
+
+    async function fetchDioceseName(dioceseId) {
+        try {
+            const response = await fetch(`http://localhost:8080/verbum-ecc/v1/diocese/${dioceseId}`);
+            if (response.ok) {
+                const diocese = await response.json();
+                return diocese.nome;
+            } else {
+                console.error('Failed to fetch diocese name');
+                return 'Unknown';
+            }
+        } catch (error) {
+            console.error('Error fetching diocese name:', error);
+            return 'Unknown';
+        }
+    }
+
+    window.onload = async function() {
+
+        const paroquiaEccId = /*[[${casal.paroquiaEcc}]]*/ '[[${casal.paroquiaEcc}]]';
+        const paroquiaAtualId = /*[[${casal.paroquiaAtual}]]*/ '[[${casal.paroquiaAtual}]]';
+        const setorId = /*[[${casal.idSetor}]]*/ '[[${casal.idSetor}]]';
+        const dioceseId = /*[[${casal.idDiocese}]]*/ '[[${casal.idDiocese}]]';
+
+        const paroquiaEccName = await fetchParoquiaName(paroquiaEccId);
+        const paroquiaAtualName = await fetchParoquiaName(paroquiaAtualId);
+        const setorName = await fetchSetorName(setorId);
+        const dioceseName = await fetchDioceseName(dioceseId);
+
+        document.getElementById('paroquiaEcc').value = paroquiaEccName;
+        document.getElementById('paroquiaAtual').value = paroquiaAtualName;
+        document.getElementById('idSetor').value = setorName;
+        document.getElementById('idDiocese').value = dioceseName;
+    };
+</script>
+</body>
+</html>

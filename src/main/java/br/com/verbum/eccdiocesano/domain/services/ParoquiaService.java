@@ -1,6 +1,9 @@
 package br.com.verbum.eccdiocesano.domain.services;
 
+import br.com.verbum.eccdiocesano.domain.entities.Casal;
+import br.com.verbum.eccdiocesano.domain.repository.CasalRepository;
 import br.com.verbum.eccdiocesano.domain.repository.ParoquiaRepository;
+import br.com.verbum.eccdiocesano.exception.BusinessException;
 import br.com.verbum.eccdiocesano.rest.dtos.DioceseDto;
 import br.com.verbum.eccdiocesano.rest.dtos.ParoquiaDto;
 import br.com.verbum.eccdiocesano.rest.mappers.ParoquiaMapper;
@@ -19,6 +22,7 @@ import java.util.*;
 public class ParoquiaService {
 
     private final ParoquiaRepository repository;
+    private final CasalRepository casalRepository;
     private final ParoquiaMapper mapper;
 
     public ResponseEntity<ParoquiaDto> findById(UUID paroquiaId) {
@@ -72,7 +76,13 @@ public class ParoquiaService {
         return ResponseEntity.ok(mapper.mapToDto(updatedParoquia));
     }
 
-    public void deleteParoquia(UUID paroquiaId) {
+    public void deleteParoquia(UUID paroquiaId) throws BusinessException {
+
+        Optional<Casal> thereIsCoupleWithParish = casalRepository.findCasalByParoquiaAtualId(paroquiaId);
+
+        if (thereIsCoupleWithParish.isPresent())
+            throw new BusinessException("Não é possível excluir a paróquia. Há casais cadastrados com ela.");
+
         repository.deleteById(paroquiaId);
     }
 

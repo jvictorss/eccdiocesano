@@ -30,6 +30,9 @@ public class UsuarioMapper {
                 .email(usuario.getEmail())
                 .telefone(usuario.getTelefone())
                 .papel(usuario.getPapel())
+                .dioceseId(usuario.getDiocese().getId())
+                .paroquiaId(usuario.getParoquia().getId())
+                .setorialId(usuario.getSetor().getId())
                 .build();
     }
 

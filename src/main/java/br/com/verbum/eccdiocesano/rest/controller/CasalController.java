@@ -6,13 +6,16 @@ import br.com.verbum.eccdiocesano.rest.dtos.CasalDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Map;
 import java.util.UUID;
 
-@RestController
+//@RestController
+@Controller
 @AllArgsConstructor
 @RequestMapping(value = "v1/casal", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CasalController {
@@ -29,12 +32,21 @@ public class CasalController {
         return ResponseEntity.ok(casal.getBody());
     }
 
+//    @GetMapping("/{casalId}")
+//    public ResponseEntity<CasalDto> getCasalById(@PathVariable UUID casalId) {
+//
+//        var casal = service.findById(casalId);
+//
+//        return ResponseEntity.ok(casal.getBody());
+//    }
+
     @GetMapping("/{casalId}")
-    public ResponseEntity<CasalDto> getCasalById(@PathVariable UUID casalId) {
+    public String getCasalById(@PathVariable UUID casalId, Model model) {
 
         var casal = service.findById(casalId);
+        model.addAttribute("casal", casal.getBody());
 
-        return ResponseEntity.ok(casal.getBody());
+        return "casal_visualizacao";
     }
 
     @PatchMapping("/{casalId}")

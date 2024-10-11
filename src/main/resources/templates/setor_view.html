@@ -108,70 +108,70 @@
 
         document.addEventListener('DOMContentLoaded', fetchSetores);
     </script>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <div class="container">
-                <a class="navbar-brand" href="v1/home">
-                    <!--            <img src="/static/images/ECC.jpg" width="30" height="24" alt="Verbum Software">-->
-                    Verbum Software
-                </a></div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Diocese
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" onclick="viewDioceses()">Ver Diocese</a></li>
-                            <li><a class="dropdown-item" href="#">Editar Diocese</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Setoriais
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" onclick="viewSetores()">Ver Setoriais</a></li>
-                            <li><a class="dropdown-item" onclick="createSetor()">Criar Setorial</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Paróquia
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" onclick="viewParoquias()">Ver Paróquias</a></li>
-                            <li><a class="dropdown-item" onclick="createParoquia()">Criar Paróquia</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Casais
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" onclick="viewCasal()">Ver Casais</a></li>
-                            <li><a class="dropdown-item" onclick="createCasal()">Criar Casal</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Usuários
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" onclick="verUsuarios()">Ver Usuários</a></li>
-                            <li><a class="dropdown-item" onclick="createUsuario()">Criar Usuário</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<!--    <nav class="navbar navbar-expand-lg bg-body-tertiary">-->
+<!--        <div class="container-fluid">-->
+<!--            <div class="container">-->
+<!--                <a class="navbar-brand" href="v1/home">-->
+<!--                    &lt;!&ndash;            <img src="/static/images/ECC.jpg" width="30" height="24" alt="Verbum Software">&ndash;&gt;-->
+<!--                    Verbum Software-->
+<!--                </a></div>-->
+<!--            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--                <span class="navbar-toggler-icon"></span>-->
+<!--            </button>-->
+<!--            <div class="collapse navbar-collapse" id="navbarNavDropdown">-->
+<!--                <ul class="navbar-nav">-->
+<!--                    <li class="nav-item dropdown">-->
+<!--                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                            Diocese-->
+<!--                        </a>-->
+<!--                        <ul class="dropdown-menu">-->
+<!--                            <li><a class="dropdown-item" onclick="viewDioceses()">Ver Diocese</a></li>-->
+<!--                            <li><a class="dropdown-item" href="#">Editar Diocese</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item dropdown">-->
+<!--                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                            Setoriais-->
+<!--                        </a>-->
+<!--                        <ul class="dropdown-menu">-->
+<!--                            <li><a class="dropdown-item" onclick="viewSetores()">Ver Setoriais</a></li>-->
+<!--                            <li><a class="dropdown-item" onclick="createSetor()">Criar Setorial</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item dropdown">-->
+<!--                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                            Paróquia-->
+<!--                        </a>-->
+<!--                        <ul class="dropdown-menu">-->
+<!--                            <li><a class="dropdown-item" onclick="viewParoquias()">Ver Paróquias</a></li>-->
+<!--                            <li><a class="dropdown-item" onclick="createParoquia()">Criar Paróquia</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item dropdown">-->
+<!--                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                            Casais-->
+<!--                        </a>-->
+<!--                        <ul class="dropdown-menu">-->
+<!--                            <li><a class="dropdown-item" onclick="viewCasal()">Ver Casais</a></li>-->
+<!--                            <li><a class="dropdown-item" onclick="createCasal()">Criar Casal</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li class="nav-item dropdown">-->
+<!--                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                            Usuários-->
+<!--                        </a>-->
+<!--                        <ul class="dropdown-menu">-->
+<!--                            <li><a class="dropdown-item" onclick="verUsuarios()">Ver Usuários</a></li>-->
+<!--                            <li><a class="dropdown-item" onclick="createUsuario()">Criar Usuário</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </nav>-->
 </head>
 <body>
-
+<div id="navbar" th:replace="~{fragments/navbar :: navbar}"></div>
 <h1>Setores</h1>
 <div class="button-container">
     <button class="create-button" onclick="createSetor()">Criar Novo Setor</button>
@@ -188,19 +188,22 @@
         <!-- Setores serão carregados aqui -->
     </tbody>
 </table>
-<div id="footer"></div>
-<script>
-    function loadFooter() {
-        fetch('/verbum-ecc/v1/footer')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer').innerHTML = data;
-            });
-    }
+<!--<div id="footer"></div>-->
+<!--<script>-->
+<!--    function loadFooter() {-->
+<!--        fetch('/verbum-ecc/v1/footer')-->
+<!--            .then(response => response.text())-->
+<!--            .then(data => {-->
+<!--                document.getElementById('footer').innerHTML = data;-->
+<!--            });-->
+<!--    }-->
 
-    window.onload = function() {
-        loadFooter();
-    };
-</script>
+<!--    window.onload = function() {-->
+<!--        loadFooter();-->
+<!--    };-->
+<!--</script>-->
+<!--<div id="navbar" th:replace="~{fragments/navbar :: navbar}"></div>-->
+<!--<div id="js-placeholder"></div>-->
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

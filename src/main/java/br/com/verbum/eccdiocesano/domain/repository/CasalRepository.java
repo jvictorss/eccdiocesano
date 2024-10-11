@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface CasalRepository extends BaseRepository<Casal> {
@@ -20,4 +21,6 @@ public interface CasalRepository extends BaseRepository<Casal> {
     // query escrita para procurar casais que foram transferidos;
 
     Optional<Casal> findCasalByEleCpfAndElaCpf(String eleCpf, String elaCpf);
+
+    Optional<Casal> findCasalByParoquiaAtualId(UUID idParoquia);
 }
