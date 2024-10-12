@@ -119,30 +119,6 @@ function cancel() {
 
 document.addEventListener('DOMContentLoaded', fetchDioceses);
 
-
-// async function fetchDioceses() {
-//     try {
-//         const response = await fetch('http://localhost:8080/verbum-ecc/v1/diocese/all/isActive=true', {
-//             method: 'GET'
-//         });
-//
-//         if (response.ok) {
-//             const dioceses = await response.json();
-//             const select = document.getElementById('diocese');
-//             dioceses.forEach(diocese => {
-//                 const option = document.createElement('option');
-//                 option.value = diocese.id;
-//                 option.textContent = diocese.nome;
-//                 select.appendChild(option);
-//             });
-//         } else {
-//             console.error('Failed to fetch dioceses');
-//         }
-//     } catch (error) {
-//         console.error('Error fetching dioceses:', error);
-//     }
-// }
-
 async function fetchSetores() {
     try {
         const response = await fetch('http://localhost:8080/verbum-ecc/v1/setorial/all/isActive=true', {
@@ -349,3 +325,10 @@ document.addEventListener('DOMContentLoaded', fetchDioceses);
 document.addEventListener('DOMContentLoaded', fetchSetores);
 document.addEventListener('DOMContentLoaded', fetchParoquias);
 document.addEventListener('DOMContentLoaded', populateEstados);
+
+window.onload = async function() {
+    await fetchDioceses();
+    // await fetchSetores();
+    await fetchParoquias();
+    populateEstados();
+};

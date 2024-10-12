@@ -7,6 +7,7 @@ import br.com.verbum.eccdiocesano.rest.dtos.ConjugeDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Component
@@ -33,6 +34,7 @@ public class ConjugeMapper {
                 .dataNascimento(conjugeDto.getDataNascimento())
                 .email(conjugeDto.getEmail())
                 .telefone(conjugeDto.getTelefone())
+                .updatedAt(OffsetDateTime.now())
                 .build();
     }
 }

@@ -13,142 +13,247 @@
 <body>
 <div id="navbar" th:replace="~{fragments/navbar :: navbar}"></div>
 <h1>Criar Novo Casal</h1>
-<form onsubmit="createCasal(event)" style="margin-bottom: 50px;">
-    <h3>Dados Ele</h3>
-    <div class="grid-section">
-        <div>
-            <label for="nomeEsposo">Nome do Esposo:</label>
-            <input type="text" id="nomeEsposo" required />
+    <form onsubmit="createCasal(event)" style="margin-bottom: 50px;">
+        <h3>Dados Ele</h3>
+        <div class="grid-section">
+            <div>
+                <label for="nomeEsposo">Nome do Esposo:</label>
+                <input type="text" id="nomeEsposo" required />
+            </div>
+            <div>
+                <label for="apelidoEsposo">Apelido do Esposo:</label>
+                <input type="text" id="apelidoEsposo" required />
+            </div>
+            <div>
+                <label for="telefoneEsposo">Telefone do Esposo:</label>
+                <input type="text" id="telefoneEsposo" placeholder="No formato (87)99999-9999" required />
+            </div>
+            <div>
+                <label for="emailEsposo">Email do Esposo:</label>
+                <input type="email" id="emailEsposo" required />
+            </div>
+            <div>
+                <label for="cpfEsposo">CPF do Esposo:</label>
+                <input type="text" id="cpfEsposo" required />
+            </div>
+            <div>
+                <label for="dataNascimentoEsposo">Data de Nascimento do Esposo:</label>
+                <input type="date" id="dataNascimentoEsposo" required />
+            </div>
+        </div>
+        <h3>Dados Ela</h3>
+        <div class="grid-section">
+            <div>
+                <label for="nomeEsposa">Nome da Esposa:</label>
+                <input type="text" id="nomeEsposa" required />
+            </div>
+            <div>
+                <label for="apelidoEsposa">Apelido da Esposa:</label>
+                <input type="text" id="apelidoEsposa" required />
+            </div>
+            <div>
+                <label for="telefoneEsposa">Telefone da Esposa:</label>
+                <input type="text" id="telefoneEsposa" placeholder="No formato (87)99999-9999" required />
+            </div>
+            <div>
+                <label for="emailEsposa">Email da Esposa:</label>
+                <input type="email" id="emailEsposa" required />
+            </div>
+            <div>
+                <label for="cpfEsposa">CPF da Esposa:</label>
+                <input type="text" id="cpfEsposa" required />
+            </div>
+            <div>
+                <label for="dataNascimentoEsposa">Data de Nascimento da Esposa:</label>
+                <input type="date" id="dataNascimentoEsposa" required />
+            </div>
+        </div>
+        <h3>Dados do casal</h3>
+        <div class="grid-section">
+            <div>
+                <label for="dataCasamentoReligioso">Data do Casamento Religioso:</label>
+                <input type="date" id="dataCasamentoReligioso" />
+            </div>
+            <div>
+                <label for="dataCasamentoCivil">Data do Casamento Civil:</label>
+                <input type="date" id="dataCasamentoCivil" required />
+            </div>
+        </div>
+        <div class="grid-section">
+            <div>
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" required />
+            </div>
+            <div>
+                <label for="bairro">Bairro:</label>
+                <input type="text" id="bairro" required />
+            </div>
+            <div>
+                <label for="cidade">Cidade:</label>
+                <input type="text" id="cidade" required />
+            </div>
+            <div>
+                <label for="estado">Estado:</label>
+                <select id="estado" required>
+                    <option value="">Selecione um estado</option>
+                </select>
+            </div>
+        </div>
+        <div class="grid-section">
+            <div>
+                <label for="paroquiaEcc">Paróquia ECC:</label>
+                <select id="paroquiaEcc" required>
+                    <option value="">Selecione uma paróquia</option>
+                </select>
+            </div>
+            <div>
+                <label for="paroquiaAtual">Paróquia Atual:</label>
+                <select id="paroquiaAtual" required>
+                    <option value="">Selecione uma paróquia</option>
+                </select>
+            </div>
+            <div>
+                <label for="setor">Setorial:</label>
+                <select id="setor" required>
+                    <option value="">Selecione um setorial</option>
+                </select>
+            </div>
+            <div>
+                <label for="diocese">Diocese:</label>
+                <select id="diocese" required>
+                    <option value="">Selecione uma diocese</option>
+                </select>
+            </div>
+        </div>
+        <div class="grid-section">
+            <div>
+                <label for="dataPrimeiraEtapa">Data da Primeira Etapa:</label>
+                <input type="date" id="dataPrimeiraEtapa" required />
+            </div>
+            <div>
+                <label for="dataSegundaEtapa">Data da Segunda Etapa:</label>
+                <input type="date" id="dataSegundaEtapa" />
+            </div>
+            <div>
+                <label for="dataTerceiraEtapa">Data da Terceira Etapa:</label>
+                <input type="date" id="dataTerceiraEtapa" />
+            </div>
+            <div>
+                <label for="isActive">Ativo:</label>
+                <input type="checkbox" id="isActive" />
+            </div>
         </div>
         <div>
-            <label for="apelidoEsposo">Apelido do Esposo:</label>
-            <input type="text" id="apelidoEsposo" required />
+            <button type="submit">Create</button>
+            <button type="reset" class="btn-clear" onclick="clear()"> Limpar </button>
+            <button type="button" class="btn-cancel" onclick="cancel()"> Cancelar </button>
         </div>
-        <div>
-            <label for="telefoneEsposo">Telefone do Esposo:</label>
-            <input type="text" id="telefoneEsposo" placeholder="No formato (87)99999-9999" required />
-        </div>
-        <div>
-            <label for="emailEsposo">Email do Esposo:</label>
-            <input type="email" id="emailEsposo" required />
-        </div>
-        <div>
-            <label for="cpfEsposo">CPF do Esposo:</label>
-            <input type="text" id="cpfEsposo" required />
-        </div>
-        <div>
-            <label for="dataNascimentoEsposo">Data de Nascimento do Esposo:</label>
-            <input type="date" id="dataNascimentoEsposo" required />
-        </div>
-    </div>
-    <h3>Dados Ela</h3>
-    <div class="grid-section">
-        <div>
-            <label for="nomeEsposa">Nome da Esposa:</label>
-            <input type="text" id="nomeEsposa" required />
-        </div>
-        <div>
-            <label for="apelidoEsposa">Apelido da Esposa:</label>
-            <input type="text" id="apelidoEsposa" required />
-        </div>
-        <div>
-            <label for="telefoneEsposa">Telefone da Esposa:</label>
-            <input type="text" id="telefoneEsposa" placeholder="No formato (87)99999-9999" required />
-        </div>
-        <div>
-            <label for="emailEsposa">Email da Esposa:</label>
-            <input type="email" id="emailEsposa" required />
-        </div>
-        <div>
-            <label for="cpfEsposa">CPF da Esposa:</label>
-            <input type="text" id="cpfEsposa" required />
-        </div>
-        <div>
-            <label for="dataNascimentoEsposa">Data de Nascimento da Esposa:</label>
-            <input type="date" id="dataNascimentoEsposa" required />
-        </div>
-    </div>
-    <h3>Dados do casal</h3>
-    <div class="grid-section">
-        <div>
-            <label for="dataCasamentoReligioso">Data do Casamento Religioso:</label>
-            <input type="date" id="dataCasamentoReligioso" />
-        </div>
-        <div>
-            <label for="dataCasamentoCivil">Data do Casamento Civil:</label>
-            <input type="date" id="dataCasamentoCivil" required />
-        </div>
-    </div>
-    <div class="grid-section">
-        <div>
-            <label for="endereco">Endereço:</label>
-            <input type="text" id="endereco" required />
-        </div>
-        <div>
-            <label for="bairro">Bairro:</label>
-            <input type="text" id="bairro" required />
-        </div>
-        <div>
-            <label for="cidade">Cidade:</label>
-            <input type="text" id="cidade" required />
-        </div>
-        <div>
-            <label for="estado">Estado:</label>
-            <select id="estado" required>
-                <option value="">Selecione um estado</option>
-            </select>
-        </div>
-    </div>
-    <div class="grid-section">
-        <div>
-            <label for="paroquiaEcc">Paróquia ECC:</label>
-            <select id="paroquiaEcc" required>
-                <option value="">Selecione uma paróquia</option>
-            </select>
-        </div>
-        <div>
-            <label for="paroquiaAtual">Paróquia Atual:</label>
-            <select id="paroquiaAtual" required>
-                <option value="">Selecione uma paróquia</option>
-            </select>
-        </div>
-        <div>
-            <label for="setor">Setorial:</label>
-            <select id="setor" required>
-                <option value="">Selecione um setorial</option>
-            </select>
-        </div>
-        <div>
-            <label for="diocese">Diocese:</label>
-            <select id="diocese" required>
-                <option value="">Selecione uma diocese</option>
-            </select>
-        </div>
-    </div>
-    <div class="grid-section">
-        <div>
-            <label for="dataPrimeiraEtapa">Data da Primeira Etapa:</label>
-            <input type="date" id="dataPrimeiraEtapa" required />
-        </div>
-        <div>
-            <label for="dataSegundaEtapa">Data da Segunda Etapa:</label>
-            <input type="date" id="dataSegundaEtapa" />
-        </div>
-        <div>
-            <label for="dataTerceiraEtapa">Data da Terceira Etapa:</label>
-            <input type="date" id="dataTerceiraEtapa" />
-        </div>
-        <div>
-            <label for="isActive">Ativo:</label>
-            <input type="checkbox" id="isActive" />
-        </div>
-    </div>
-    <div>
-        <button type="submit">Create</button>
-        <button type="reset" class="btn-clear" onclick="clear()"> Limpar </button>
-        <button type="button" class="btn-cancel" onclick="cancel()"> Cancelar </button>
-    </div>
-</form>
+    </form>
 </body>
-    <footer th:replace="~{fragments/footer :: footer}"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<script>
+    async function fetchDioceses() {
+        try {
+            const response = await fetch('http://localhost:8080/verbum-ecc/v1/diocese/all/isActive=true');
+            if (response.ok) {
+                const dioceses = await response.json();
+                const select = document.getElementById('diocese');
+                dioceses.forEach(diocese => {
+                    const option = document.createElement('option');
+                    option.value = diocese.id;
+                    option.textContent = diocese.nome;
+                    select.appendChild(option);
+                });
+            } else {
+                console.error('Failed to fetch dioceses');
+            }
+        } catch (error) {
+            console.error('Error fetching dioceses:', error);
+        }
+    }
+
+    async function fetchParoquias() {
+        try {
+            const response = await fetch('http://localhost:8080/verbum-ecc/v1/paroquia/all/isActive=true', {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                const paroquias = await response.json();
+                const paroquiaEccSelect = document.getElementById('paroquiaEcc');
+                const paroquiaAtualSelect = document.getElementById('paroquiaAtual');
+                paroquias.forEach(paroquia => {
+                    const option = document.createElement('option');
+                    option.value = paroquia.id;
+                    option.textContent = paroquia.nome;
+                    paroquiaEccSelect.appendChild(option.cloneNode(true));
+                    paroquiaAtualSelect.appendChild(option);
+                });
+            } else {
+                console.error('Failed to fetch paróquias');
+            }
+        } catch (error) {
+            console.error('Error fetching paróquias:', error);
+        }
+    }
+    async function createCasal(event) {
+        event.preventDefault();
+
+        const conjugeEle = {
+            nome: document.getElementById('nomeEsposo').value,
+            apelido: document.getElementById('apelidoEsposo').value,
+            telefone: document.getElementById('telefoneEsposo').value,
+            email: document.getElementById('emailEsposo').value,
+            cpf: document.getElementById('cpfEsposo').value,
+            dataNascimento: document.getElementById('dataNascimentoEsposo').value
+        };
+
+        const conjugeEla = {
+            nome: document.getElementById('nomeEsposa').value,
+            apelido: document.getElementById('apelidoEsposa').value,
+            telefone: document.getElementById('telefoneEsposa').value,
+            email: document.getElementById('emailEsposa').value,
+            cpf: document.getElementById('cpfEsposa').value,
+            dataNascimento: document.getElementById('dataNascimentoEsposa').value
+        };
+
+        const casalData = {
+            ele: conjugeEle,
+            ela: conjugeEla,
+            dataCasamentoReligioso: document.getElementById('dataCasamentoReligioso').value,
+            dataCasamentoCivil: document.getElementById('dataCasamentoCivil').value,
+            endereco: document.getElementById('endereco').value,
+            bairro: document.getElementById('bairro').value,
+            cidade: document.getElementById('cidade').value,
+            estado: document.getElementById('estado').value,
+            paroquiaEcc: document.getElementById('paroquiaEcc').value,
+            paroquiaAtual: document.getElementById('paroquiaAtual').value,
+            idSetor: document.getElementById('setor').value,
+            idDiocese: document.getElementById('diocese').value,
+            dataPrimeiraEtapa: document.getElementById('dataPrimeiraEtapa').value,
+            dataSegundaEtapa: document.getElementById('dataSegundaEtapa').value,
+            dataTerceiraEtapa: document.getElementById('dataTerceiraEtapa').value,
+            isActive: document.getElementById('isActive').checked
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/verbum-ecc/v1/casal/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(casalData)
+            });
+
+            if (response.ok) {
+                alert('Casal criado com sucesso!');
+                window.location.href = '/verbum-ecc/view-casais';
+            } else {
+                console.error('Falha ao criar casal');
+            }
+        } catch (error) {
+            console.error('Erro ao criar casal:', error);
+        }
+    }
+</script>
 </html>

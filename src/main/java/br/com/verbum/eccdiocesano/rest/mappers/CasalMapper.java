@@ -3,11 +3,14 @@ package br.com.verbum.eccdiocesano.rest.mappers;
 import br.com.verbum.eccdiocesano.domain.entities.Casal;
 import br.com.verbum.eccdiocesano.domain.entities.Conjuge;
 import br.com.verbum.eccdiocesano.rest.dtos.CasalDto;
+import br.com.verbum.eccdiocesano.rest.dtos.CasalResponseDto;
 import br.com.verbum.eccdiocesano.rest.dtos.ConjugeDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -80,5 +83,19 @@ public class CasalMapper {
         return casais.stream()
                 .map(this::mapToDto)
                 .toList();
+    }
+
+    public List<CasalResponseDto> mapFromQueryFirstStep(List<Map<String, Object>> results) {
+    return results.stream().map(result -> CasalResponseDto.builder()
+            .apelidoEle((String) result.get("apelidoEle"))
+            .telefoneEle((String) result.get("telefoneEle"))
+            .apelidoEla((String) result.get("apelidoEla"))
+            .telefoneEla((String) result.get("telefoneEla"))
+            .dataPrimeiraEtapa((String) result.get("data_primeira_etapa"))
+            .dataSegundaEtapa((String) result.get("data_segunda_etapa"))
+            .dataTerceiraEtapa((String) result.get("data_terceira_etapa"))
+            .paroquiaNome((String) result.get("paroquiaNome"))
+            .isActive((Boolean) result.get("is_active"))
+            .build()).collect(Collectors.toList());
     }
 }

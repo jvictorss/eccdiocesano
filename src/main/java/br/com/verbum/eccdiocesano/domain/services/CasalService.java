@@ -1,5 +1,6 @@
 package br.com.verbum.eccdiocesano.domain.services;
 
+import br.com.verbum.eccdiocesano.domain.entities.Casal;
 import br.com.verbum.eccdiocesano.domain.repository.*;
 import br.com.verbum.eccdiocesano.rest.dtos.CasalDto;
 import br.com.verbum.eccdiocesano.rest.dtos.DioceseDto;
@@ -8,13 +9,17 @@ import br.com.verbum.eccdiocesano.rest.dtos.SetorDto;
 import br.com.verbum.eccdiocesano.rest.mappers.*;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -33,7 +38,9 @@ public class CasalService {
     private final ParoquiaRepository paroquiaRepository;
     private final SetorRepository setorRepository;
     private final DioceseRepository dioceseRepository;
+    private final PdfService pdfService;
 
+    @Transactional
     public ResponseEntity<CasalDto> createCasal(CasalDto casalDto) {
 
         var existingDiocese = repository.findCasalByEleCpfAndElaCpf(casalDto.getEle().getCpf(), casalDto.getEla().getCpf());
@@ -44,18 +51,32 @@ public class CasalService {
         var ele = conjugeRepository.save(conjugeMapper.mapConjugeToEntity(casalDto.getEle())).getId();
         var ela = conjugeRepository.save(conjugeMapper.mapConjugeToEntity(casalDto.getEla())).getId();
 
+        var eleId = conjugeRepository.findById(ele).orElseThrow();
+        var elaId = conjugeRepository.findById(ela).orElseThrow();
+
         var mappedCasal = mapper.mapToEntity(casalDto);
-        mappedCasal.setEle(conjugeRepository.findById(ele).orElseThrow());
-        mappedCasal.setEla(conjugeRepository.findById(ela).orElseThrow());
+        mappedCasal.setEle(eleId);
+        mappedCasal.setEla(elaId);
         mappedCasal.setParoquiaEcc(paroquiaRepository.findById(casalDto.getParoquiaEcc()).orElseThrow());
         mappedCasal.setParoquiaAtual(paroquiaRepository.findById(casalDto.getParoquiaAtual()).orElseThrow());
         mappedCasal.setSetorial(setorRepository.findById(casalDto.getIdSetor()).orElseThrow());
         mappedCasal.setDiocese(dioceseRepository.findById(casalDto.getIdDiocese()).orElseThrow());
         mappedCasal.setCreatedAt(OffsetDateTime.now());
 
-        var casal = repository.save(mappedCasal);
+        var conjuge1 = mappedCasal.getEle();
+        var conjuge2 = mappedCasal.getEla();
 
-        return ResponseEntity.ok(mapper.mapToDto(casal));
+        conjuge1.setCasal(mappedCasal);
+        conjuge2.setCasal(mappedCasal);
+        conjuge1.setCreatedAt(OffsetDateTime.now());
+        conjuge2.setCreatedAt(OffsetDateTime.now());
+        conjuge1.setIsActive(mappedCasal.getIsActive());
+        conjuge2.setIsActive(mappedCasal.getIsActive());
+
+        conjugeRepository.save(conjuge1);
+        conjugeRepository.save(conjuge2);
+
+        return ResponseEntity.ok(mapper.mapToDto(repository.save(mappedCasal)));
     }
 
     public ResponseEntity<CasalDto> findById(UUID dioceseId) {
@@ -119,7 +140,14 @@ public class CasalService {
     public ResponseEntity<Iterable<CasalDto>> findAll(boolean isActive) {
         var casais = repository.findAllByIsActive(isActive);
 
-
         return ResponseEntity.ok(mapper.mapToDto(casais));
+    }
+
+    public byte[] findAllPrimeiraEtapaAndParoquia(UUID paroquiaId) throws IOException {
+        var casais = repository.getCasaisPrimeiraEtapaPorParoquia(paroquiaId);
+
+        var listaCasais = mapper.mapFromQueryFirstStep(casais);
+
+        return pdfService.generateCouplesFormPdf(listaCasais, listaCasais.get(0).getParoquiaNome());
     }
 }

@@ -17,4 +17,9 @@ public class CasalResponseDto {
     private String telefoneEle;
     private String apelidoEla;
     private String telefoneEla;
+    private String dataPrimeiraEtapa;
+    private String dataSegundaEtapa;
+    private String dataTerceiraEtapa;
+    private String paroquiaNome;
+    private boolean isActive;
 }
