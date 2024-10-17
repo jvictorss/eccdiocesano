@@ -43,9 +43,9 @@ public class CasalService {
     @Transactional
     public ResponseEntity<CasalDto> createCasal(CasalDto casalDto) {
 
-        var existingDiocese = repository.findCasalByEleCpfAndElaCpf(casalDto.getEle().getCpf(), casalDto.getEla().getCpf());
-        if (existingDiocese.isPresent()) {
-            throw new EntityExistsException("Casal already exists");
+        var existingCouple = repository.findCasalByEleCpfAndElaCpf(casalDto.getEle().getCpf(), casalDto.getEla().getCpf());
+        if (existingCouple.isPresent()) {
+            throw new EntityExistsException("Já existe o cadastro para este casal");
         }
 
         var ele = conjugeRepository.save(conjugeMapper.mapConjugeToEntity(casalDto.getEle())).getId();
@@ -149,5 +149,13 @@ public class CasalService {
         var listaCasais = mapper.mapFromQueryFirstStep(casais);
 
         return pdfService.generateCouplesFormPdf(listaCasais, listaCasais.get(0).getParoquiaNome());
+    }
+
+    public byte[] findAllCouplesWithoutMatrimonySacrament(UUID paroquiaId) throws IOException {
+        var casais = repository.getCasaisSemSacramentoDoMatrimonio(paroquiaId);
+
+        var listaCasais = mapper.mapFromQueryWithoutSacrament(casais);
+
+        return pdfService.generateCouplesWithoutSacrament(listaCasais, listaCasais.get(0).getParoquiaNome());
     }
 }

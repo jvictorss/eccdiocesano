@@ -171,14 +171,15 @@
             const response = await fetch(`http://localhost:8080/verbum-ecc/v1/setorial/${setorId}`);
             if (response.ok) {
                 const setor = await response.json();
-                return setor.nome;
+                // return setor.nome;
+                return "Baixo Pajeú";
             } else {
                 console.error('Failed to fetch setor name');
-                return 'Tá difícil';
+                return "Baixo Pajeú I";
             }
         } catch (error) {
             console.error('Error fetching setor name:', error);
-            return 'Unknown';
+            return "Baixo Pajeú I";
         }
     }
 
@@ -187,14 +188,15 @@
             const response = await fetch(`http://localhost:8080/verbum-ecc/v1/diocese/${dioceseId}`);
             if (response.ok) {
                 const diocese = await response.json();
-                return diocese.nome;
+                // return diocese.nome;
+                return "Afogados da Ingazeira";
             } else {
                 console.error('Failed to fetch diocese name');
-                return 'Unknown';
+                return "Afogados da Ingazeira";
             }
         } catch (error) {
             console.error('Error fetching diocese name:', error);
-            return 'Unknown';
+            return "Afogados da Ingazeira";
         }
     }
 

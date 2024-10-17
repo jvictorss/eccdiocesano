@@ -1,6 +1,10 @@
 package br.com.verbum.eccdiocesano.domain.services;
 
+import br.com.verbum.eccdiocesano.domain.entities.Casal;
+import br.com.verbum.eccdiocesano.domain.entities.Setor;
 import br.com.verbum.eccdiocesano.domain.repository.DioceseRepository;
+import br.com.verbum.eccdiocesano.domain.repository.SetorRepository;
+import br.com.verbum.eccdiocesano.exception.BusinessException;
 import br.com.verbum.eccdiocesano.rest.dtos.DioceseDto;
 import br.com.verbum.eccdiocesano.rest.mappers.DioceseMapper;
 import jakarta.persistence.EntityExistsException;
@@ -14,6 +18,7 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,6 +27,7 @@ public class DioceseService {
 
     private final DioceseRepository repository;
     private final DioceseMapper dioceseMapper;
+    private final SetorRepository setorRepository;
 
     public ResponseEntity<DioceseDto> createDiocese(DioceseDto dioceseDto) {
 
@@ -72,8 +78,13 @@ public class DioceseService {
         return ResponseEntity.ok(dioceseMapper.mapToDto(updatedDiocese));
     }
 
-    public void deleteDiocese(UUID dioceseId) {
+    public void deleteDiocese(UUID dioceseId) throws BusinessException {
         var logger = LoggerFactory.getLogger(DioceseService.class);
+
+        int count = setorRepository.findSetorByIdDiocese(dioceseId);
+
+        if (count > 0)
+            throw new BusinessException("Não é possível excluir a Diocese. Há setores cadastrados com ela.");
 
         var diocese = repository.findById(dioceseId).orElseThrow(() -> {
             logger.error("Diocese with ID {} not found", dioceseId);

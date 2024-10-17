@@ -1,6 +1,8 @@
 package br.com.verbum.eccdiocesano.domain.services;
 
+import br.com.verbum.eccdiocesano.domain.repository.ParoquiaRepository;
 import br.com.verbum.eccdiocesano.domain.repository.SetorRepository;
+import br.com.verbum.eccdiocesano.exception.BusinessException;
 import br.com.verbum.eccdiocesano.rest.dtos.SetorDto;
 import br.com.verbum.eccdiocesano.rest.mappers.SetorMapper;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,7 @@ public class SetorService {
     private final SetorRepository repository;
     private final SetorMapper mapper;
     private final SetorMapper setorMapper;
+    private final ParoquiaRepository paroquiaRepository;
 
     public ResponseEntity<SetorDto> findById(UUID setorId) {
 
@@ -63,7 +66,12 @@ public class SetorService {
         return ResponseEntity.ok(mapper.mapToDto(setor));
     }
 
-    public void deleteSetor(UUID setorId) {
+    public void deleteSetor(UUID setorId) throws BusinessException {
+
+        int count = paroquiaRepository.findParoquiaByIdSetor(setorId);
+
+        if (count > 0)
+            throw new BusinessException("Não é possível excluir o Setorial. Há paróquias cadastrados com ela.");
 
         var setor = repository.findById(setorId).orElseThrow();
 

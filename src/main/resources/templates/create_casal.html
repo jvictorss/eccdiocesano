@@ -154,7 +154,7 @@
 <script>
     async function fetchDioceses() {
         try {
-            const response = await fetch('http://localhost:8080/verbum-ecc/v1/diocese/all/isActive=true');
+            const response = await fetch('/verbum-ecc/v1/diocese/all/isActive=true');
             if (response.ok) {
                 const dioceses = await response.json();
                 const select = document.getElementById('diocese');
@@ -174,7 +174,7 @@
 
     async function fetchParoquias() {
         try {
-            const response = await fetch('http://localhost:8080/verbum-ecc/v1/paroquia/all/isActive=true', {
+            const response = await fetch('/verbum-ecc/v1/paroquia/all/isActive=true', {
                 method: 'GET'
             });
 
@@ -237,7 +237,7 @@
         };
 
         try {
-            const response = await fetch('http://localhost:8080/verbum-ecc/v1/casal/create', {
+            const response = await fetch('/verbum-ecc/v1/casal/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -247,13 +247,18 @@
 
             if (response.ok) {
                 alert('Casal criado com sucesso!');
-                window.location.href = '/verbum-ecc/view-casais';
+                window.location.href = '/v1/casal/view';
             } else {
                 console.error('Falha ao criar casal');
+                alert("Não foi possível criar o casal.")
             }
         } catch (error) {
             console.error('Erro ao criar casal:', error);
         }
     }
+
+    document.addEventListener('DOMContentLoaded', fetchParoquias);
+    document.addEventListener('DOMContentLoaded', fetchDioceses);
+    document.addEventListener('DOMContentLoaded', fetchDioceses);
 </script>
 </html>

@@ -14,6 +14,11 @@ public class TelasController {
         return "create_diocese";
     }
 
+//    @GetMapping("/v1/diocese/editar/{id}")
+//    public String updateDioceseForm() {
+//        return "update_diocese";
+//    }
+
     @GetMapping("/v1/diocese/view")
     public String showSeeDioceseForm() {
         return "diocese_view";
@@ -27,6 +32,16 @@ public class TelasController {
     @GetMapping("/v1/setor/view")
     public String showSeeSetorForm() {
         return "setor_view";
+    }
+
+    @GetMapping("/v1/relatorios/casais-para-segunda-etapa")
+    public String showRelatorioCasaisParaSegundaEtapa() {
+        return "casais_para_segunda_etapa";
+    }
+
+    @GetMapping("/v1/relatorios/casais-sem-sacramento")
+    public String showRelatorioCasaisSemMatrimonio() {
+        return "casais_sem_matrimonio";
     }
 
     @GetMapping("/v1/paroquia/form")
@@ -52,15 +67,25 @@ public class TelasController {
         return "usuario_view";
     }
 
-    @GetMapping("/v1/casal/view")
+    @GetMapping("/v1/casal/ver-casais")
     public String showSeeCasalForm() {
         return "casal_summary_view";
     }
 
-    @GetMapping("/v1/casal/view/{id}")
-    public String showViewCasalForm(@PathVariable("id") UUID id) {
-        return "casal_visualizacao";
+    @GetMapping("/v1/casal/ver-casais-inativos")
+    public String showInactiveCouples() {
+        return "casal_inactive_view";
     }
+
+//    @GetMapping("/v1/casal/view/{id}")
+//    public String showViewCasalForm(@PathVariable("id") UUID id) {
+//        return "casal_visualizacao";
+//    }
+//
+//    @GetMapping("/v1/diocese/editar/{id}")
+//    public String showUpdateDiocese(@PathVariable("id") UUID id) {
+//        return "update_diocese";
+//    }
 
     @GetMapping("/v1/login")
     public String showLogin() {

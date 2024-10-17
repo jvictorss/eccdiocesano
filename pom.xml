@@ -44,11 +44,19 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.itextpdf</groupId>-->
+<!--            <artifactId>itext7-core</artifactId>-->
+<!--            <version>7.2.3</version>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext7-core</artifactId>
-            <version>7.2.3</version>
+            <version>7.2.0</version>
+            <type>pom</type>
         </dependency>
+
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -140,11 +148,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -182,6 +185,62 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven3-plugin</artifactId>
+                <version>1.10.13</version>
+                <configuration>
+                    <container>
+                        <containerId>tomcat10x</containerId>
+                    </container>
+                    <configuration>
+                        <properties>
+                            <cargo.servlet.port>8181</cargo.servlet.port>
+                        </properties>
+                    </configuration>
+                </configuration>
+            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-war-plugin</artifactId>-->
+<!--                <version>3.2.1</version>-->
+<!--            </plugin>-->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        <manifestEntries>-->
+<!--                            Permissions: file:/Users/joao/workspace/my-project/data rw- -->
+<!--                        </manifestEntries>-->
+<!--                    </archive>-->
+<!--                </configuration>-->
+            </plugin>
+            <!--                <plugin>-->
+            <!--                    <artifactId>maven-install-plugin</artifactId>-->
+            <!--                    <version>2.5.2</version>-->
+            <!--                </plugin>-->
+            <!--                <plugin>-->
+            <!--                    <artifactId>maven-deploy-plugin</artifactId>-->
+            <!--                    <version>2.8.2</version>-->
+            <!--                </plugin>-->
+            <!--                <plugin>-->
+            <!--                    <artifactId>maven-clean-plugin</artifactId>-->
+            <!--                    <version>3.1.0</version>-->
+            <!--                </plugin>-->
+            <!--                <plugin>-->
+            <!--                    <artifactId>maven-resources-plugin</artifactId>-->
+            <!--                    <version>3.0.2</version>-->
+            <!--                </plugin>-->
+            <!--                <plugin>-->
+            <!--                    <artifactId>maven-surefire-plugin</artifactId>-->
+            <!--                    <version>2.22.1</version>-->
+            <!--                </plugin>-->
         </plugins>
     </build>
 

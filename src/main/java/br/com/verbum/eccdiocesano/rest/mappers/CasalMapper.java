@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 @Component
 @AllArgsConstructor
 public class CasalMapper {
@@ -96,6 +98,18 @@ public class CasalMapper {
             .dataTerceiraEtapa((String) result.get("data_terceira_etapa"))
             .paroquiaNome((String) result.get("paroquiaNome"))
             .isActive((Boolean) result.get("is_active"))
-            .build()).collect(Collectors.toList());
+            .build()).collect(toList());
+    }
+
+    public List<CasalResponseDto> mapFromQueryWithoutSacrament(List<Map<String, Object>> results) {
+        return results.stream().map(result -> CasalResponseDto.builder()
+                .apelidoEle((String) result.get("apelidoEle"))
+                .telefoneEle((String) result.get("telefoneEle"))
+                .apelidoEla((String) result.get("apelidoEla"))
+                .telefoneEla((String) result.get("telefoneEla"))
+                .casamentoCivil((String) result.get("casamentoCivil"))
+                .paroquiaNome((String) result.get("paroquiaNome"))
+                .isActive((Boolean) result.get("is_active"))
+                .build()).collect(toList());
     }
 }

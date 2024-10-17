@@ -9,7 +9,6 @@ import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.canvas.draw.DashedLine;
 import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
@@ -31,6 +30,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static br.com.verbum.eccdiocesano.domain.utils.FormatUtils.formatDate;
+import static br.com.verbum.eccdiocesano.domain.utils.FormatUtils.formatPhoneNumber;
+
 @Service
 public class PdfService {
 
@@ -42,16 +44,7 @@ public class PdfService {
 
         pdfDocument.addEventHandler(PdfDocumentEvent.END_PAGE, new FooterEventHandler());
 
-        ClassPathResource imageResource = new ClassPathResource("static/images/ECC.jpg");
-        ImageData imageData = ImageDataFactory.create(imageResource.getURL());
-        Image image = new Image(imageData);
-        image.setHorizontalAlignment(HorizontalAlignment.CENTER);
-        image.setWidth(UnitValue.createPercentValue(8));
-
-        document.add(image);
-        document.add(new Paragraph("Encontro de Casais com Cristo - ECC\nDiocese de Afogados da Ingazeira - Pernambuco")
-                .setBold()
-                .setTextAlignment(TextAlignment.CENTER));
+        cabecalhoComum(document);
 
         LineSeparator headerLineSeparator = new LineSeparator(new SolidLine());
         headerLineSeparator.setHorizontalAlignment(HorizontalAlignment.CENTER);
@@ -65,76 +58,137 @@ public class PdfService {
     }
 
     public byte[] generateCouplesFormPdf(List<CasalResponseDto> casais, String paroquiaNome) throws IOException {
-    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    PdfWriter writer = new PdfWriter(byteArrayOutputStream);
-    PdfDocument pdfDocument = new PdfDocument(writer);
-    Document document = new Document(pdfDocument);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PdfWriter writer = new PdfWriter(byteArrayOutputStream);
+        PdfDocument pdfDocument = new PdfDocument(writer);
+        Document document = new Document(pdfDocument);
 
-    pdfDocument.addEventHandler(PdfDocumentEvent.END_PAGE, new FooterEventHandler());
+        pdfDocument.addEventHandler(PdfDocumentEvent.END_PAGE, new FooterEventHandler());
 
-    // Adicionando imagem e cabeçalho
-    ClassPathResource imageResource = new ClassPathResource("static/images/ECC.jpg");
-    ImageData imageData = ImageDataFactory.create(imageResource.getURL());
-    Image image = new Image(imageData);
-    image.setHorizontalAlignment(HorizontalAlignment.CENTER);
-    image.setWidth(UnitValue.createPercentValue(8));
+        cabecalhoComum(document);
 
-    document.add(image);
-    document.add(new Paragraph("Encontro de Casais com Cristo - ECC\nDiocese de Afogados da Ingazeira - Pernambuco")
-            .setBold().setFontSize(9)
-            .setTextAlignment(TextAlignment.CENTER));
-
-    LineSeparator headerLineSeparator = new LineSeparator(new SolidLine());
-    headerLineSeparator.setHorizontalAlignment(HorizontalAlignment.CENTER);
-    document.add(headerLineSeparator);
-
-    document.add(new Paragraph("Relatório de Casais para Segunda Etapa\nParóquia " + paroquiaNome)
+        document.add(new Paragraph("Relatório de Casais para Segunda Etapa\nParóquia " + paroquiaNome)
             .setFontSize(9)
             .setTextAlignment(TextAlignment.CENTER));
 
-    Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 4}));
-    table.setWidth(UnitValue.createPercentValue(100));
+        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 4}));
+        table.setWidth(UnitValue.createPercentValue(100));
 
-    table.addHeaderCell(new Cell().add(new Paragraph("Casal").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
-    table.addHeaderCell(new Cell().add(new Paragraph("Fone Ele / Fone Ela").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
-    table.addHeaderCell(new Cell().add(new Paragraph("Primeira Etapa").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
-    table.addHeaderCell(new Cell().add(new Paragraph("O casal está").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
-    table.addHeaderCell(new Cell().add(new Paragraph("Paróquia").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
+        table.addHeaderCell(new Cell().add(new Paragraph("Casal").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
+        table.addHeaderCell(new Cell().add(new Paragraph("Fone Ele / Fone Ela").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
+        table.addHeaderCell(new Cell().add(new Paragraph("Primeira Etapa").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
+        table.addHeaderCell(new Cell().add(new Paragraph("O casal está").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
+        table.addHeaderCell(new Cell().add(new Paragraph("Paróquia").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
 
-    for (CasalResponseDto casal : casais) {
-        String casalNames = casal.getApelidoEle() + " / " + casal.getApelidoEla();
-        String phones = formatPhoneNumber(casal.getTelefoneEle().trim()) + "\n" + formatPhoneNumber(casal.getTelefoneEla().trim());
-        String dataPrimeiraEtapa = formatDate(casal.getDataPrimeiraEtapa());
-        String status = casal.isActive() ? "Ativo" : "Inativo";
-        String paroquia = casal.getParoquiaNome();
+        for (CasalResponseDto casal : casais) {
+            String casalNames = casal.getApelidoEle() + " / " + casal.getApelidoEla();
+            String phones = formatPhoneNumber(casal.getTelefoneEle().trim()) + "\n" + formatPhoneNumber(casal.getTelefoneEla().trim());
+            String dataPrimeiraEtapa = formatDate(casal.getDataPrimeiraEtapa());
+            String status = casal.isActive() ? "Ativo" : "Inativo";
+            String paroquia = casal.getParoquiaNome();
 
-        table.addCell(new Cell().add(new Paragraph(casalNames).setFontSize(8))
-                .setTextAlignment(TextAlignment.CENTER))
-                .setVerticalAlignment(VerticalAlignment.MIDDLE)
-                .setBorder(Border.NO_BORDER);
-        table.addCell(new Cell().add(new Paragraph(phones).setFontSize(8))
-                .setTextAlignment(TextAlignment.CENTER))
-                .setVerticalAlignment(VerticalAlignment.MIDDLE)
-                .setBorder(Border.NO_BORDER);
-        table.addCell(new Cell().add(new Paragraph(dataPrimeiraEtapa).setFontSize(8))
-                .setTextAlignment(TextAlignment.CENTER))
-                .setVerticalAlignment(VerticalAlignment.MIDDLE)
-                .setBorder(Border.NO_BORDER);
-        table.addCell(new Cell().add(new Paragraph(status).setFontSize(8))
-                .setTextAlignment(TextAlignment.CENTER))
-                .setVerticalAlignment(VerticalAlignment.MIDDLE)
-                .setBorder(Border.NO_BORDER);
-        table.addCell(new Cell().add(new Paragraph(paroquia).setFontSize(8))
-                .setTextAlignment(TextAlignment.CENTER))
-                .setVerticalAlignment(VerticalAlignment.MIDDLE)
-                .setBorder(Border.NO_BORDER);
+            table.addCell(new Cell().add(new Paragraph(casalNames).setFontSize(8))
+                    .setTextAlignment(TextAlignment.CENTER))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setBorder(Border.NO_BORDER);
+            table.addCell(new Cell().add(new Paragraph(phones).setFontSize(8))
+                    .setTextAlignment(TextAlignment.CENTER))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setBorder(Border.NO_BORDER);
+            table.addCell(new Cell().add(new Paragraph(dataPrimeiraEtapa).setFontSize(8))
+                    .setTextAlignment(TextAlignment.CENTER))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setBorder(Border.NO_BORDER);
+            table.addCell(new Cell().add(new Paragraph(status).setFontSize(8))
+                    .setTextAlignment(TextAlignment.CENTER))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setBorder(Border.NO_BORDER);
+            table.addCell(new Cell().add(new Paragraph(paroquia).setFontSize(8))
+                    .setTextAlignment(TextAlignment.CENTER))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setBorder(Border.NO_BORDER);
+        }
+
+        document.add(table);
+
+        document.close();
+        return byteArrayOutputStream.toByteArray();
     }
 
-    document.add(table);
+    public byte[] generateCouplesWithoutSacrament(List<CasalResponseDto> casais, String paroquiaNome) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PdfWriter writer = new PdfWriter(byteArrayOutputStream);
+        PdfDocument pdfDocument = new PdfDocument(writer);
+        Document document = new Document(pdfDocument);
 
-    document.close();
-    return byteArrayOutputStream.toByteArray();
-}
+        pdfDocument.addEventHandler(PdfDocumentEvent.END_PAGE, new FooterEventHandler());
+
+        cabecalhoComum(document);
+
+        document.add(new Paragraph("Relatório de Casais sem Sacramento do Matrimônio\nParóquia " + paroquiaNome)
+                .setFontSize(9)
+                .setTextAlignment(TextAlignment.CENTER));
+
+        Table table = new Table(UnitValue.createPercentArray(new float[]{3, 2, 2, 2, 4}));
+        table.setWidth(UnitValue.createPercentValue(100));
+
+        table.addHeaderCell(new Cell().add(new Paragraph("Casal").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
+        table.addHeaderCell(new Cell().add(new Paragraph("Fone Ele / Fone Ela").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
+        table.addHeaderCell(new Cell().add(new Paragraph("Casamento Civil").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
+        table.addHeaderCell(new Cell().add(new Paragraph("O casal está").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
+        table.addHeaderCell(new Cell().add(new Paragraph("Paróquia").setFontSize(8)).setBold().setTextAlignment(TextAlignment.CENTER));
+
+        for (CasalResponseDto casal : casais) {
+            String casalNames = casal.getApelidoEle() + " / " + casal.getApelidoEla();
+            String phones = formatPhoneNumber(casal.getTelefoneEle().trim()) + "\n" + formatPhoneNumber(casal.getTelefoneEla().trim());
+            String casamentoCivil = formatDate(casal.getCasamentoCivil());
+            String status = casal.isActive() ? "Ativo" : "Inativo";
+            String paroquia = casal.getParoquiaNome();
+
+            table.addCell(new Cell().add(new Paragraph(casalNames).setFontSize(8))
+                            .setTextAlignment(TextAlignment.CENTER))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setBorder(Border.NO_BORDER);
+            table.addCell(new Cell().add(new Paragraph(phones).setFontSize(8))
+                            .setTextAlignment(TextAlignment.CENTER))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setBorder(Border.NO_BORDER);
+            table.addCell(new Cell().add(new Paragraph(casamentoCivil).setFontSize(8))
+                            .setTextAlignment(TextAlignment.CENTER))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setBorder(Border.NO_BORDER);
+            table.addCell(new Cell().add(new Paragraph(status).setFontSize(8))
+                            .setTextAlignment(TextAlignment.CENTER))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setBorder(Border.NO_BORDER);
+            table.addCell(new Cell().add(new Paragraph(paroquia).setFontSize(8))
+                            .setTextAlignment(TextAlignment.CENTER))
+                    .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                    .setBorder(Border.NO_BORDER);
+        }
+
+        document.add(table);
+
+        document.close();
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    private static void cabecalhoComum(Document document) throws IOException {
+        ClassPathResource imageResource = new ClassPathResource("static/images/ECC.jpg");
+        ImageData imageData = ImageDataFactory.create(imageResource.getURL());
+        Image image = new Image(imageData);
+        image.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        image.setWidth(UnitValue.createPercentValue(8));
+
+        document.add(image);
+        document.add(new Paragraph("Encontro de Casais com Cristo - ECC\nDiocese de Afogados da Ingazeira - Pernambuco")
+                .setBold().setFontSize(9)
+                .setTextAlignment(TextAlignment.CENTER));
+
+        LineSeparator headerLineSeparator = new LineSeparator(new SolidLine());
+        headerLineSeparator.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        document.add(headerLineSeparator);
+    }
 
 
     private static class FooterEventHandler implements IEventHandler {
@@ -158,19 +212,5 @@ public class PdfService {
                 .setTextAlignment(TextAlignment.RIGHT)
                 .setFontSize(8), 545, 20, pdfDoc.getPageNumber(page), TextAlignment.RIGHT, VerticalAlignment.BOTTOM, 0);
         }
-    }
-
-    private String formatPhoneNumber(String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.length() != 11) {
-            return phoneNumber;
-        }
-        return String.format("(%s) %s-%s", phoneNumber.substring(0, 2), phoneNumber.substring(2, 7), phoneNumber.substring(7));
-    }
-
-    private String formatDate(String date) {
-        if (date == null || date.length() != 10) {
-            return date;
-        }
-        return String.format("%s/%s/%s", date.substring(8, 10), date.substring(5, 7), date.substring(0, 4));
     }
 }

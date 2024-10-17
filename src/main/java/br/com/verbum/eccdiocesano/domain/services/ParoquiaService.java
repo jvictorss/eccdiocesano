@@ -78,10 +78,10 @@ public class ParoquiaService {
 
     public void deleteParoquia(UUID paroquiaId) throws BusinessException {
 
-        Optional<Casal> thereIsCoupleWithParish = casalRepository.findCasalByParoquiaAtualId(paroquiaId);
+            Optional<Casal> temCasalNaParoquia = casalRepository.findCasalByParoquiaAtualId(paroquiaId);
 
-        if (thereIsCoupleWithParish.isPresent())
-            throw new BusinessException("Não é possível excluir a paróquia. Há casais cadastrados com ela.");
+            if (temCasalNaParoquia.isPresent())
+                throw new BusinessException("Não é possível excluir a paróquia. Há casais cadastrados com ela.");
 
         repository.deleteById(paroquiaId);
     }

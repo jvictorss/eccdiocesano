@@ -40,20 +40,20 @@
         </select>
     </div>
     <div>
-        <label for="diocese">Diocese:</label>
-        <select id="diocese" required>
+        <label for="idDiocese">Diocese:</label>
+        <select id="idDiocese" required>
             <option value="">Selecione uma diocese</option>
         </select>
     </div>
     <div>
-        <label for="setor">Setorial:</label>
-        <select id="setor" required>
+        <label for="idSetor">Setorial:</label>
+        <select id="idSetor" required>
             <option value="">Selecione um setorial</option>
         </select>
     </div>
     <div>
-        <label for="paroquia">Paróquia:</label>
-        <select id="paroquia" required>
+        <label for="idParoquia">Paróquia:</label>
+        <select id="idParoquia" required>
             <option value="">Selecione uma paróquia</option>
         </select>
     </div>
@@ -66,126 +66,126 @@
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 <script>
-    // async function fetchDioceses() {
-    //     try {
-    //         const response = await fetch('http://localhost:8080/verbum-ecc/v1/diocese/all/isActive=true', {
-    //             method: 'GET'
-    //         });
-    //
-    //         if (response.ok) {
-    //             const dioceses = await response.json();
-    //             const select = document.getElementById('diocese');
-    //             dioceses.forEach(diocese => {
-    //                 const option = document.createElement('option');
-    //                 option.value = diocese.id;
-    //                 option.textContent = diocese.nome;
-    //                 select.appendChild(option);
-    //             });
-    //         } else {
-    //             console.error('Failed to fetch dioceses');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching dioceses:', error);
-    //     }
-    // }
-    //
-    // async function fetchSetores() {
-    //     try {
-    //         const response = await fetch('http://localhost:8080/verbum-ecc/v1/setorial/all/isActive=true', {
-    //             method: 'GET'
-    //         });
-    //
-    //         if (response.ok) {
-    //             const setores = await response.json();
-    //             const select = document.getElementById('setor');
-    //             setores.forEach(setor => {
-    //                 const option = document.createElement('option');
-    //                 option.value = setor.id;
-    //                 option.textContent = setor.nome;
-    //                 select.appendChild(option);
-    //             });
-    //         } else {
-    //             console.error('Failed to fetch setores');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching setores:', error);
-    //     }
-    // }
-    //
-    // async function fetchParoquias() {
-    //     try {
-    //         const response = await fetch('http://localhost:8080/verbum-ecc/v1/paroquia/all/isActive=true', {
-    //             method: 'GET'
-    //         });
-    //
-    //         if (response.ok) {
-    //             const paroquias = await response.json();
-    //             const select = document.getElementById('paroquia');
-    //             paroquias.forEach(paroquia => {
-    //                 const option = document.createElement('option');
-    //                 option.value = paroquia.id;
-    //                 option.textContent = paroquia.nome;
-    //                 select.appendChild(option);
-    //             });
-    //         } else {
-    //             console.error('Failed to fetch paróquias');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error fetching paróquias:', error);
-    //     }
-    // }
-    //
-    // async function createUser(event) {
-    //     event.preventDefault();
-    //
-    //     const nome = document.getElementById('nome').value;
-    //     const email = document.getElementById('email').value;
-    //     const senha = document.getElementById('senha').value;
-    //     const telefone = document.getElementById('telefone').value;
-    //     const papel = document.getElementById('papel').value;
-    //     const diocese = document.getElementById('diocese').value;
-    //     const setor = document.getElementById('setor').value;
-    //     const paroquia = document.getElementById('paroquia').value;
-    //
-    //     const response = await fetch('http://localhost:8080/verbum-ecc/v1/usuarios/create', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({
-    //             nome: nome,
-    //             email: email,
-    //             senha: senha,
-    //             telefone: telefone,
-    //             papel: papel,
-    //             idDiocese: diocese,
-    //             idSetor: setor,
-    //             idParoquia: paroquia
-    //         })
-    //     });
-    //
-    //     if (response.ok) {
-    //         alert('Usuário criado com sucesso!');
-    //         clear();
-    //     } else {
-    //         alert('Erro ao criar usuário.');
-    //     }
-    // }
-    //
-    // function clear() {
-    //     document.getElementById('nome').value = '';
-    //     document.getElementById('email').value = '';
-    //     document.getElementById('senha').value = '';
-    //     document.getElementById('telefone').value = '';
-    //     document.getElementById('papel').value = '';
-    //     document.getElementById('diocese').value = '';
-    //     document.getElementById('setor').value = '';
-    //     document.getElementById('paroquia').value = '';
-    // }
-    //
-    // function cancel() {
-    //     window.location.href = '/verbum-ecc/v1/home';
-    // }
+    async function fetchDioceses() {
+        try {
+            const response = await fetch('/verbum-ecc/v1/diocese/all/isActive=true', {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                const dioceses = await response.json();
+                const select = document.getElementById('idDiocese');
+                dioceses.forEach(diocese => {
+                    const option = document.createElement('option');
+                    option.value = diocese.id;
+                    option.textContent = diocese.nome;
+                    select.appendChild(option);
+                });
+            } else {
+                console.error('Failed to fetch dioceses');
+            }
+        } catch (error) {
+            console.error('Error fetching dioceses:', error);
+        }
+    }
+
+    async function fetchSetores() {
+        try {
+            const response = await fetch('/verbum-ecc/v1/setorial/all/isActive=true', {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                const setores = await response.json();
+                const select = document.getElementById('idSetor');
+                setores.forEach(setor => {
+                    const option = document.createElement('option');
+                    option.value = setor.id;
+                    option.textContent = setor.nome;
+                    select.appendChild(option);
+                });
+            } else {
+                console.error('Failed to fetch setores');
+            }
+        } catch (error) {
+            console.error('Error fetching setores:', error);
+        }
+    }
+
+    async function fetchParoquias() {
+        try {
+            const response = await fetch('/verbum-ecc/v1/paroquia/all/isActive=true', {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                const paroquias = await response.json();
+                const select = document.getElementById('idParoquia');
+                paroquias.forEach(paroquia => {
+                    const option = document.createElement('option');
+                    option.value = paroquia.id;
+                    option.textContent = paroquia.nome;
+                    select.appendChild(option);
+                });
+            } else {
+                console.error('Failed to fetch paróquias');
+            }
+        } catch (error) {
+            console.error('Error fetching paróquias:', error);
+        }
+    }
+
+    async function createUser(event) {
+        event.preventDefault();
+
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const senha = document.getElementById('senha').value;
+        const telefone = document.getElementById('telefone').value;
+        const papel = document.getElementById('papel').value;
+        const diocese = document.getElementById('idDiocese').value;
+        const setor = document.getElementById('idSetor').value;
+        const paroquia = document.getElementById('idParoquia').value;
+
+        const response = await fetch('/verbum-ecc/v1/usuarios/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                nome: nome,
+                email: email,
+                senha: senha,
+                telefone: telefone,
+                papel: papel,
+                idDiocese: diocese,
+                idSetor: setor,
+                idParoquia: paroquia
+            })
+        });
+
+        if (response.ok) {
+            alert('Usuário criado com sucesso!');
+            clear();
+        } else {
+            alert('Erro ao criar usuário.');
+        }
+    }
+
+    function clear() {
+        document.getElementById('nome').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('senha').value = '';
+        document.getElementById('telefone').value = '';
+        document.getElementById('papel').value = '';
+        document.getElementById('idDiocese').value = '';
+        document.getElementById('idSetor').value = '';
+        document.getElementById('idParoquia').value = '';
+    }
+
+    function cancel() {
+        window.location.href = '/verbum-ecc/v1/home';
+    }
 
     document.addEventListener('DOMContentLoaded', fetchDioceses);
     document.addEventListener('DOMContentLoaded', fetchSetores);

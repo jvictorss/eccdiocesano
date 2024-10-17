@@ -20,9 +20,6 @@ public interface CasalRepository extends BaseRepository<Casal> {
 
     // query escrita para procurar casais da paróquia entre ativos e inativos;
 
-    // query escrita para procurar casais que fizeram determinada etapa
-//    @Query("SELECT c.nomeEle  ")
-
     // query escrita para procurar casais que foram transferidos;
 
     Optional<Casal> findCasalByEleCpfAndElaCpf(String eleCpf, String elaCpf);
@@ -43,4 +40,17 @@ public interface CasalRepository extends BaseRepository<Casal> {
             "and ca.data_terceira_etapa = '' " +
             "AND ca.paroquia_atual_id = :paroquiaAtualId", nativeQuery = true)
     List<Map<String, Object>> getCasaisPrimeiraEtapaPorParoquia(UUID paroquiaAtualId);
+
+    @Query(value = "SELECT " +
+            "c1.apelido AS apelidoEle, c1.telefone AS telefoneEle," +
+            "c2.apelido as apelidoEla, c2.telefone as telefoneEla," +
+            "ca.data_casamento_civil as casamentoCivil," +
+            "p.nome as paroquiaNome, ca.is_active " +
+            "FROM casal ca " +
+            "JOIN conjuge c1 on ca.ele_id = c1.id " +
+            "JOIN conjuge c2 on ca.ela_id = c2.id " +
+            "JOIN paroquia p on ca.paroquia_atual_id = p.id " +
+            "where ca.data_casamento_religioso = '' " +
+            "and ca.paroquia_atual_id = :paroquiaId;", nativeQuery = true)
+    List<Map<String, Object>> getCasaisSemSacramentoDoMatrimonio(UUID paroquiaId);
 }

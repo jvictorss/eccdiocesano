@@ -20,6 +20,7 @@ public class CasalResponseDto {
     private String dataPrimeiraEtapa;
     private String dataSegundaEtapa;
     private String dataTerceiraEtapa;
+    private String casamentoCivil;
     private String paroquiaNome;
     private boolean isActive;
 }

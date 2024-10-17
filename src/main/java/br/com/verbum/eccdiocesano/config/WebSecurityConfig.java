@@ -61,18 +61,27 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterAppChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Configurando o CSRF com a nova API lambda
-                .cors(AbstractHttpConfigurer::disable) // Desabilitando o CORS com a nova API
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/**", "/v1/login","/v1/usuarios/create/**","/verbum-ecc/**", "/proxy/**", "/v3/api-docs/**",
-                                "/images/**", "/templates/**", "/swagger-ui.html/**",
-                                "/css/**", "/swagger-ui/**",
-                                "/swagger-resources/**", "/swagger-resources").permitAll() // Permitindo todas essas rotas
-                        .anyRequest().authenticated()) // Configuração das autorizações de requisição
+                        .requestMatchers(
+                                "/**",
+                                "/v1/login",
+//                                "/v1/usuarios/create/**",
+//                                "/verbum-ecc/**",
+                                "/proxy/**",
+                                "/images/**",
+                                "/templates/**",
+                                "/swagger-ui.html/**",
+                                "/css/**",
+                                "/swagger-ui/**",
+                                "/swagger-resources/**",
+                                "/swagger-resources").permitAll()
+                        .anyRequest().authenticated())
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Gerenciamento de sessões com a nova API
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exceptions -> exceptions
-                        .authenticationEntryPoint(unauthorizedHandler)); // Tratamento de exceções atualizado
+                        .authenticationEntryPoint(unauthorizedHandler));
 
         http.authenticationProvider(authenticationProvider());
 

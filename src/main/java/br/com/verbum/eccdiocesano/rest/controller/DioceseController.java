@@ -2,21 +2,26 @@ package br.com.verbum.eccdiocesano.rest.controller;
 
 
 import br.com.verbum.eccdiocesano.domain.services.DioceseService;
+import br.com.verbum.eccdiocesano.exception.BusinessException;
 import br.com.verbum.eccdiocesano.rest.dtos.DioceseDto;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Map;
 import java.util.UUID;
 
-@RestController
+@Controller
 @AllArgsConstructor
 @RequestMapping(value = "v1/diocese", produces = MediaType.APPLICATION_JSON_VALUE)
 public class DioceseController {
 
+    @Autowired
     private final DioceseService service;
 
     @PostMapping("/create")
@@ -27,7 +32,7 @@ public class DioceseController {
         return ResponseEntity.ok(diocese.getBody());
     }
 
-    @GetMapping("/{dioceseId}")
+    @GetMapping("/get/{dioceseId}")
     public ResponseEntity<DioceseDto> getDioceseById(@PathVariable UUID dioceseId) {
 
         var diocese = service.findById(dioceseId);
@@ -43,8 +48,17 @@ public class DioceseController {
         return ResponseEntity.ok(diocese.getBody());
     }
 
+    @GetMapping("/{dioceseId}")
+    public String getDioceseToUpdate(@PathVariable UUID dioceseId, Model model) {
+
+        var diocese = service.findById(dioceseId);
+        model.addAttribute("diocese", diocese.getBody());
+
+        return "update_diocese";
+    }
+
     @DeleteMapping("/{dioceseId}")
-    public ResponseEntity<Void> deleteDiocese(@PathVariable UUID dioceseId) {
+    public ResponseEntity<Void> deleteDiocese(@PathVariable UUID dioceseId) throws BusinessException {
 
         service.deleteDiocese(dioceseId);
 

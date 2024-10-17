@@ -10,6 +10,14 @@ function viewDioceses() {
     window.location.href = '/verbum-ecc/v1/diocese/view';
 }
 
+function updateDiocese(id) {
+    window.location.href = `/verbum-ecc/v1/diocese/${id}`;
+}
+
+function updateSetor(id) {
+    window.location.href = `/verbum-ecc/v1/setorial/${id}`;
+}
+
 function createSetor() {
     window.location.href = '/verbum-ecc/v1/setor/form';
 }
@@ -26,16 +34,24 @@ function viewParoquias() {
     window.location.href = '/verbum-ecc/v1/paroquia/view';
 }
 
-function createCasal() {
+function createCasalForm() {
     window.location.href = '/verbum-ecc/v1/casal/form';
 }
 
 function viewCasal() {
-    window.location.href = '/verbum-ecc/v1/casal/view';
+    window.location.href = '/verbum-ecc/v1/casal/ver-casais';
+}
+
+function viewCasaisInativos() {
+    window.location.href = '/verbum-ecc/v1/casal/ver-casais-inativos';
 }
 
 function qtdCasaisParoquia() {
-    window.location.href = '/verbum-ecc/v1/pdf/generate';
+    window.location.href = '/verbum-ecc/v1/relatorios/casais-para-segunda-etapa';
+}
+
+function qtdCasaisSemMatrimonio() {
+    window.location.href = '/verbum-ecc/v1/relatorios/casais-sem-sacramento';
 }
 
 function createUsuario() {
@@ -68,7 +84,7 @@ async function fetchData(url) {
 
 async function fetchDioceses() {
     try {
-        const response = await fetch('http://localhost:8080/verbum-ecc/v1/diocese/all/isActive=true');
+        const response = await fetch('/verbum-ecc/v1/diocese/all/isActive=true');
         if (response.ok) {
             const dioceses = await response.json();
             const tableBody = document.getElementById('dioceseTableBody');
@@ -76,8 +92,10 @@ async function fetchDioceses() {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${diocese.nome}</td>
+                    <td>${diocese.cidade}</td>
+                    <td>${diocese.estado}</td>
                     <td>
-                        <button onclick="editDiocese('${diocese.id}')">Editar</button>
+                        <button onclick="updateDiocese('${diocese.id}')">Editar</button>
                         <button onclick="deleteDiocese('${diocese.id}')">Excluir</button>
                     </td>
                 `;
@@ -91,14 +109,10 @@ async function fetchDioceses() {
     }
 }
 
-function editDiocese(id) {
-    window.location.href = `/verbum-ecc/v1/diocese/form/${id}`;
-}
-
 async function deleteDiocese(id) {
     if (confirm('Tem certeza que deseja excluir esta diocese?')) {
         try {
-            const response = await fetch(`http://localhost:8080/verbum-ecc/v1/diocese/${id}`, {
+            const response = await fetch(`/verbum-ecc/v1/diocese/${id}`, {
                 method: 'DELETE'
             });
             if (response.ok) {
@@ -110,6 +124,76 @@ async function deleteDiocese(id) {
         } catch (error) {
             console.error('Error deleting diocese:', error);
         }
+    }
+}
+
+async function emitirRelatorioParaSegundaEtapa(event) {
+    event.preventDefault();
+
+    const paroquiaId = document.getElementById('paroquia').value;
+
+    if (!paroquiaId) {
+        alert('Por favor, selecione uma paróquia.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8080/verbum-ecc/v1/pdf/first-step/${paroquiaId}`, {
+            method: 'GET',
+            // headers: {
+            //     'Authorization': `Bearer ${token}`
+            // }
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'casais-para-segunda-etapa.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } else {
+            alert('Falha ao emitir relatório.');
+        }
+    } catch (error) {
+        console.error('Error emitting report:', error);
+    }
+}
+
+async function casaisSemMatrimonio(event) {
+    event.preventDefault();
+
+    const paroquiaId = document.getElementById('paroquia').value;
+
+    if (!paroquiaId) {
+        alert('Por favor, selecione uma paróquia.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8080/verbum-ecc/v1/pdf/without-sacrament/${paroquiaId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'casais-para-segunda-etapa.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } else {
+            alert('Falha ao emitir relatório.');
+        }
+    } catch (error) {
+        console.error('Error emitting report:', error);
     }
 }
 
@@ -173,9 +257,9 @@ async function createUser(event) {
     const senha = document.getElementById('senha').value;
     const telefone = document.getElementById('telefone').value;
     const papel = document.getElementById('papel').value;
-    const diocese = document.getElementById('diocese').value;
-    const setor = document.getElementById('setor').value;
-    const paroquia = document.getElementById('paroquia').value;
+    const idDiocese = document.getElementById('diocese').value;
+    const idSetor = document.getElementById('setor').value;
+    const idParoquia = document.getElementById('paroquia').value;
 
     const response = await fetch('http://localhost:8080/verbum-ecc/v1/usuarios/create', {
         method: 'POST',
@@ -188,9 +272,9 @@ async function createUser(event) {
             senha: senha,
             telefone: telefone,
             papel: papel,
-            idDiocese: diocese,
-            idSetor: setor,
-            idParoquia: paroquia
+            idDiocese: idDiocese,
+            idSetor: idSetor,
+            idParoquia: idParoquia
         })
     });
 
@@ -327,8 +411,8 @@ document.addEventListener('DOMContentLoaded', fetchParoquias);
 document.addEventListener('DOMContentLoaded', populateEstados);
 
 window.onload = async function() {
-    await fetchDioceses();
+    // await fetchDioceses();
     // await fetchSetores();
-    await fetchParoquias();
+    // await fetchParoquias();
     populateEstados();
 };
