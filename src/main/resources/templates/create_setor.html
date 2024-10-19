@@ -42,7 +42,7 @@
             const isActive = document.getElementById('isActive').checked;
 
             try {
-                const response = await fetch('http://localhost:8080/verbum-ecc/v1/setorial', {
+                const response = await fetch('/verbum-ecc/v1/setorial', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -56,6 +56,7 @@
 
                 if (response.ok) {
                     alert('Setor criado com sucesso!');
+                    viewSetores();
                 } else {
                     alert('Falha ao criar setor. Entre em contato com o Administrador.');
                 }
