@@ -119,7 +119,7 @@ async function deleteDiocese(id) {
                 alert('Diocese excluída com sucesso!');
                 location.reload();
             } else {
-                alert('Falha ao excluir diocese.');
+                alert('Falha ao excluir diocese. Existem setores cadastrados nela.');
             }
         } catch (error) {
             console.error('Error deleting diocese:', error);
