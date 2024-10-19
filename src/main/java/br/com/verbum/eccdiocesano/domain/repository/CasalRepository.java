@@ -42,6 +42,21 @@ public interface CasalRepository extends BaseRepository<Casal> {
     List<Map<String, Object>> getCasaisPrimeiraEtapaPorParoquia(UUID paroquiaAtualId);
 
     @Query(value = "SELECT " +
+            "c1.apelido AS apelidoEle, c1.telefone AS telefoneEle, " +
+            "c2.apelido AS apelidoEla, c2.telefone AS telefoneEla, " +
+            "ca.data_primeira_etapa, " +
+            "p.nome AS paroquiaNome, ca.is_active " +
+            "FROM casal ca " +
+            "JOIN conjuge c1 ON ca.ele_id = c1.id " +
+            "JOIN conjuge c2 ON ca.ela_id = c2.id " +
+            "JOIN paroquia p ON ca.paroquia_atual_id = p.id " +
+            "where ca.data_primeira_etapa != ''" +
+            "and ca.data_segunda_etapa != '' " +
+            "and ca.data_terceira_etapa = '' " +
+            "AND ca.paroquia_atual_id = :paroquiaAtualId", nativeQuery = true)
+    List<Map<String, Object>> getCasaisSegundaEtapaPorParoquia(UUID paroquiaAtualId);
+
+    @Query(value = "SELECT " +
             "c1.apelido AS apelidoEle, c1.telefone AS telefoneEle," +
             "c2.apelido as apelidoEla, c2.telefone as telefoneEla," +
             "ca.data_casamento_civil as casamentoCivil," +

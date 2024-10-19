@@ -53,13 +53,26 @@ public class PdfController {
                 .body(pdfBytes);
     }
 
+    @GetMapping("/second-step/{paroquiaId}")
+    public ResponseEntity<byte[]> allSecondStep(@PathVariable UUID paroquiaId) throws IOException {
+        byte[] pdfBytes = casalService.findAllSegundaEtapaAndParoquia(paroquiaId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "casais-para-terceira-etapa.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
+    }
+
     @GetMapping("/without-sacrament/{paroquiaId}")
     public ResponseEntity<byte[]> allWithoutSacrament(@PathVariable UUID paroquiaId) throws IOException {
         byte[] pdfBytes = casalService.findAllCouplesWithoutMatrimonySacrament(paroquiaId);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("attachment", "casais-para-segunda-etapa.pdf");
+        headers.setContentDispositionFormData("attachment", "casais-sem-sacramento-do-matrimonio.pdf");
 
         return ResponseEntity.ok()
                 .headers(headers)

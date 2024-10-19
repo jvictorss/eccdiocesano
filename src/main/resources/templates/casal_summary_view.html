@@ -9,13 +9,12 @@
     <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/verbum-ecc/js/functions.js"></script>
-    <title>Casais Ativos</title>
     <link rel="stylesheet" type="text/css" href="/verbum-ecc/css/create_diocese.css">
     <script>
 
         async function fetchParoquiaName(paroquiaId) {
             try {
-                const response = await fetch(`http://localhost:8080/verbum-ecc/v1/paroquia/${paroquiaId}`);
+                const response = await fetch(`/verbum-ecc/v1/paroquia/get/${paroquiaId}`);
                 if (response.ok) {
                     const paroquia = await response.json();
                     return paroquia.nome;
@@ -35,7 +34,7 @@
 
         async function fetchCasais() {
             try {
-                const response = await fetch('http://localhost:8080/verbum-ecc/v1/casal/all?isActive=true');
+                const response = await fetch('/verbum-ecc/v1/casal/all?isActive=true');
                 if (response.ok) {
                     const casais = await response.json();
                     const tableBody = document.getElementById('casalTableBody');
@@ -71,7 +70,7 @@
         }
 
         function editarCasalPorId(id) {
-            window.location.href = `/verbum-ecc/v1/casal/form/${id}`;
+            window.location.href = `/verbum-ecc/v1/casal/update/${id}`;
         }
 
         function viewCasal(id) {
@@ -81,7 +80,7 @@
         async function deleteCasal(id) {
             if (confirm('Tem certeza que deseja excluir este casal?')) {
                 try {
-                    const response = await fetch(`http://localhost:8080/verbum-ecc/v1/casal/${id}`, {
+                    const response = await fetch(`/verbum-ecc/v1/casal/${id}`, {
                         method: 'DELETE'
                     });
                     if (response.ok) {

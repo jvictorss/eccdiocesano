@@ -57,7 +57,7 @@ public class PdfService {
         return byteArrayOutputStream.toByteArray();
     }
 
-    public byte[] generateCouplesFormPdf(List<CasalResponseDto> casais, String paroquiaNome) throws IOException {
+    public byte[] generateCouplesFormPdf(List<CasalResponseDto> casais, String paroquiaNome, String reportName) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         PdfWriter writer = new PdfWriter(byteArrayOutputStream);
         PdfDocument pdfDocument = new PdfDocument(writer);
@@ -67,7 +67,7 @@ public class PdfService {
 
         cabecalhoComum(document);
 
-        document.add(new Paragraph("Relatório de Casais para Segunda Etapa\nParóquia " + paroquiaNome)
+        document.add(new Paragraph(reportName.concat("\nParóquia " + paroquiaNome))
             .setFontSize(9)
             .setTextAlignment(TextAlignment.CENTER));
 

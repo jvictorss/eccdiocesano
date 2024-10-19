@@ -29,13 +29,13 @@ public class SetorController {
         return ResponseEntity.ok(setor.getBody());
     }
 
-//    @GetMapping("/{setorId}")
-//    public ResponseEntity<SetorDto> getSetorById(@PathVariable UUID setorId) {
-//
-//        var setor = service.findById(setorId);
-//
-//        return ResponseEntity.ok(setor.getBody());
-//    }
+    @GetMapping("/get/{setorId}")
+    public ResponseEntity<SetorDto> getSetorById(@PathVariable UUID setorId) {
+
+        var setor = service.findById(setorId);
+
+        return ResponseEntity.ok(setor.getBody());
+    }
 
     @GetMapping("/{setorId}")
     public String getSetorToUpdate(@PathVariable UUID setorId, Model model) {

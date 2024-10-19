@@ -39,6 +39,11 @@ public class TelasController {
         return "casais_para_segunda_etapa";
     }
 
+    @GetMapping("/v1/relatorios/casais-para-terceira-etapa")
+    public String showRelatorioCasaisParaTerceiraEtapa() {
+        return "casais_para_terceira_etapa";
+    }
+
     @GetMapping("/v1/relatorios/casais-sem-sacramento")
     public String showRelatorioCasaisSemMatrimonio() {
         return "casais_sem_matrimonio";

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -87,7 +86,7 @@ public class CasalMapper {
                 .toList();
     }
 
-    public List<CasalResponseDto> mapFromQueryFirstStep(List<Map<String, Object>> results) {
+    public List<CasalResponseDto> mapFromQuerySteps(List<Map<String, Object>> results) {
     return results.stream().map(result -> CasalResponseDto.builder()
             .apelidoEle((String) result.get("apelidoEle"))
             .telefoneEle((String) result.get("telefoneEle"))

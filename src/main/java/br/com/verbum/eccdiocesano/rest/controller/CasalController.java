@@ -32,13 +32,22 @@ public class CasalController {
         return ResponseEntity.ok(casal.getBody());
     }
 
-//    @GetMapping("/{casalId}")
-//    public ResponseEntity<CasalDto> getCasalById(@PathVariable UUID casalId) {
-//
-//        var casal = service.findById(casalId);
-//
-//        return ResponseEntity.ok(casal.getBody());
-//    }
+    @GetMapping("/get/{casalId}")
+    public ResponseEntity<CasalDto> getCasalById(@PathVariable UUID casalId) {
+
+        var casal = service.findById(casalId);
+
+        return ResponseEntity.ok(casal.getBody());
+    }
+
+    @GetMapping("/update/{casalId}")
+    public String getCasalToUpdate(@PathVariable UUID casalId, Model model) {
+
+        var casal = service.findById(casalId);
+        model.addAttribute("casal", casal.getBody());
+
+        return "update_casal";
+    }
 
     @GetMapping("/{casalId}")
     public String getCasalById(@PathVariable UUID casalId, Model model) {
@@ -50,9 +59,9 @@ public class CasalController {
     }
 
     @PatchMapping("/{casalId}")
-    public ResponseEntity<CasalDto> updateCasal(@PathVariable UUID casalId, @RequestBody Map<String, Object> parameters) {
+    public ResponseEntity<CasalDto> updateCasal(@PathVariable UUID casalId, @RequestBody CasalDto casalDto) {
 
-        var casal = service.updateCasal(casalId, parameters);
+        var casal = service.updateCasal(casalId, casalDto);
 
         return ResponseEntity.ok(casal.getBody());
     }

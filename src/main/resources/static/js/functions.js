@@ -46,8 +46,12 @@ function viewCasaisInativos() {
     window.location.href = '/verbum-ecc/v1/casal/ver-casais-inativos';
 }
 
-function qtdCasaisParoquia() {
+function casaisParaSegundaEtapa() {
     window.location.href = '/verbum-ecc/v1/relatorios/casais-para-segunda-etapa';
+}
+
+function casaisParaTerceiraEtapa() {
+    window.location.href = '/verbum-ecc/v1/relatorios/casais-para-terceira-etapa';
 }
 
 function qtdCasaisSemMatrimonio() {
@@ -162,6 +166,41 @@ async function emitirRelatorioParaSegundaEtapa(event) {
     }
 }
 
+async function emitirRelatorioParaTerceiraEtapa(event) {
+    event.preventDefault();
+
+    const paroquiaId = document.getElementById('paroquia').value;
+
+    if (!paroquiaId) {
+        alert('Por favor, selecione uma paróquia.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8080/verbum-ecc/v1/pdf/second-step/${paroquiaId}`, {
+            method: 'GET',
+            // headers: {
+            //     'Authorization': `Bearer ${token}`
+            // }
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'casais-para-terceira-etapa.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } else {
+            alert('Falha ao emitir relatório.');
+        }
+    } catch (error) {
+        console.error('Error emitting report:', error);
+    }
+}
+
 async function casaisSemMatrimonio(event) {
     event.preventDefault();
 
@@ -173,7 +212,7 @@ async function casaisSemMatrimonio(event) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8080/verbum-ecc/v1/pdf/without-sacrament/${paroquiaId}`, {
+        const response = await fetch(`/verbum-ecc/v1/pdf/without-sacrament/${paroquiaId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -185,7 +224,7 @@ async function casaisSemMatrimonio(event) {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'casais-para-segunda-etapa.pdf';
+            a.download = 'casais-sem-sacramento-do-matrimonio.pdf';
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -205,7 +244,7 @@ document.addEventListener('DOMContentLoaded', fetchDioceses);
 
 async function fetchSetores() {
     try {
-        const response = await fetch('http://localhost:8080/verbum-ecc/v1/setorial/all/isActive=true', {
+        const response = await fetch('/verbum-ecc/v1/setorial/all/isActive=true', {
             method: 'GET'
         });
 

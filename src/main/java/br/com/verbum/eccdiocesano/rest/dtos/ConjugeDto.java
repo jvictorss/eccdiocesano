@@ -19,4 +19,12 @@ public class ConjugeDto {
     @NotNull private String email;
     @NotNull private String cpf;
     @NotNull private String dataNascimento;
+
+    public @NotNull String getCpf() {
+    return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+}
+
+public @NotNull String getTelefone() {
+    return telefone.replaceAll("(\\d{2})(\\d{5})(\\d{4})", "($1) $2-$3");
+}
 }
