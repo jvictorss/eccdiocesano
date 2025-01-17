@@ -2,16 +2,12 @@ package br.com.verbum.eccdiocesano.domain.repository;
 
 import br.com.verbum.eccdiocesano.domain.entities.Casal;
 import br.com.verbum.eccdiocesano.domain.reuse.BaseRepository;
-import br.com.verbum.eccdiocesano.rest.dtos.CasalResponseDto;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
 public interface CasalRepository extends BaseRepository<Casal> {
@@ -22,50 +18,190 @@ public interface CasalRepository extends BaseRepository<Casal> {
 
     // query escrita para procurar casais que foram transferidos;
 
-    Optional<Casal> findCasalByEleCpfAndElaCpf(String eleCpf, String elaCpf);
+    Optional<Casal> findCasalByEleTelefoneAndElaTelefone(String telefoneEle, String telefoneEla);
 
-    Optional<Casal> findCasalByParoquiaAtualId(UUID idParoquia);
+    @Query(value =
+            """
+             SELECT
+             c1.apelido AS apelidoEle, c1.telefone AS telefoneEle,
+             c2.apelido AS apelidoEla, c2.telefone AS telefoneEla,
+             ca.data_primeira_etapa,
+             ca.is_active
+             FROM casal ca
+             JOIN conjuge c1 ON ca.ele_id = c1.id
+             JOIN conjuge c2 ON ca.ela_id = c2.id
+             where ca.data_primeira_etapa != ''
+             and ca.data_segunda_etapa = ''
+             and ca.data_terceira_etapa = ''
+             order by apelidoEle;
+            """, nativeQuery = true)
+    List<Map<String, Object>> getCasaisPrimeiraEtapa();
 
-    @Query(value = "SELECT " +
-            "c1.apelido AS apelidoEle, c1.telefone AS telefoneEle, " +
-            "c2.apelido AS apelidoEla, c2.telefone AS telefoneEla, " +
-            "ca.data_primeira_etapa, " +
-            "p.nome AS paroquiaNome, ca.is_active " +
-            "FROM casal ca " +
-            "JOIN conjuge c1 ON ca.ele_id = c1.id " +
-            "JOIN conjuge c2 ON ca.ela_id = c2.id " +
-            "JOIN paroquia p ON ca.paroquia_atual_id = p.id " +
-            "where ca.data_primeira_etapa != ''" +
-            "and ca.data_segunda_etapa = '' " +
-            "and ca.data_terceira_etapa = '' " +
-            "AND ca.paroquia_atual_id = :paroquiaAtualId", nativeQuery = true)
-    List<Map<String, Object>> getCasaisPrimeiraEtapaPorParoquia(UUID paroquiaAtualId);
+    @Query(value =
+            """
+             SELECT
+             count(1) as count_primeira_etapa
+             FROM casal ca
+             JOIN conjuge c1 ON ca.ele_id = c1.id
+             JOIN conjuge c2 ON ca.ela_id = c2.id
+             where ca.data_primeira_etapa != ''
+             and ca.data_segunda_etapa = ''
+             and ca.data_terceira_etapa = ''
+            """, nativeQuery = true)
+    Map<String, Object> countCasaisPrimeiraEtapa();
 
-    @Query(value = "SELECT " +
-            "c1.apelido AS apelidoEle, c1.telefone AS telefoneEle, " +
-            "c2.apelido AS apelidoEla, c2.telefone AS telefoneEla, " +
-            "ca.data_primeira_etapa, " +
-            "p.nome AS paroquiaNome, ca.is_active " +
-            "FROM casal ca " +
-            "JOIN conjuge c1 ON ca.ele_id = c1.id " +
-            "JOIN conjuge c2 ON ca.ela_id = c2.id " +
-            "JOIN paroquia p ON ca.paroquia_atual_id = p.id " +
-            "where ca.data_primeira_etapa != ''" +
-            "and ca.data_segunda_etapa != '' " +
-            "and ca.data_terceira_etapa = '' " +
-            "AND ca.paroquia_atual_id = :paroquiaAtualId", nativeQuery = true)
-    List<Map<String, Object>> getCasaisSegundaEtapaPorParoquia(UUID paroquiaAtualId);
+    @Query(value =
+            """
+            SELECT
+            c1.apelido AS apelidoEle, c1.telefone AS telefoneEle,
+            c2.apelido AS apelidoEla, c2.telefone AS telefoneEla,
+            ca.data_primeira_etapa,
+            ca.data_segunda_etapa,
+            ca.is_active
+            FROM casal ca
+            JOIN conjuge c1 ON ca.ele_id = c1.id
+            JOIN conjuge c2 ON ca.ela_id = c2.id
+            where ca.data_primeira_etapa != ''
+            and ca.data_segunda_etapa != ''
+            and ca.data_terceira_etapa = ''
+            order by apelidoEle;
+            """, nativeQuery = true)
+    List<Map<String, Object>> getCasaisSegundaEtapa();
 
-    @Query(value = "SELECT " +
-            "c1.apelido AS apelidoEle, c1.telefone AS telefoneEle," +
-            "c2.apelido as apelidoEla, c2.telefone as telefoneEla," +
-            "ca.data_casamento_civil as casamentoCivil," +
-            "p.nome as paroquiaNome, ca.is_active " +
-            "FROM casal ca " +
-            "JOIN conjuge c1 on ca.ele_id = c1.id " +
-            "JOIN conjuge c2 on ca.ela_id = c2.id " +
-            "JOIN paroquia p on ca.paroquia_atual_id = p.id " +
-            "where ca.data_casamento_religioso = '' " +
-            "and ca.paroquia_atual_id = :paroquiaId;", nativeQuery = true)
-    List<Map<String, Object>> getCasaisSemSacramentoDoMatrimonio(UUID paroquiaId);
+    @Query(value =
+            """
+            SELECT
+            count(1) as count_segunda_etapa
+            FROM casal ca
+            JOIN conjuge c1 ON ca.ele_id = c1.id
+            JOIN conjuge c2 ON ca.ela_id = c2.id
+            where ca.data_primeira_etapa != ''
+            and ca.data_segunda_etapa != ''
+            and ca.data_terceira_etapa = ''
+            """, nativeQuery = true)
+    Map<String, Object> countCasaisSegundaEtapa();
+
+    @Query(value =
+            """
+            SELECT
+            c1.apelido AS apelidoEle, c1.telefone AS telefoneEle,
+            c2.apelido AS apelidoEla, c2.telefone AS telefoneEla,
+            ca.data_primeira_etapa,
+            ca.data_segunda_etapa,
+            ca.data_terceira_etapa,
+            ca.is_active
+            FROM casal ca
+            JOIN conjuge c1 ON ca.ele_id = c1.id
+            JOIN conjuge c2 ON ca.ela_id = c2.id
+            where ca.data_primeira_etapa != ''
+            and ca.data_segunda_etapa != ''
+            and ca.data_terceira_etapa != ''
+            order by apelidoEle;
+            """
+
+            , nativeQuery = true)
+    List<Map<String, Object>> getCasaisTerceiraEtapa();
+
+    @Query(value =
+            """
+            SELECT
+            count(1) as count_terceira_etapa
+            FROM casal ca
+            JOIN conjuge c1 ON ca.ele_id = c1.id
+            JOIN conjuge c2 ON ca.ela_id = c2.id
+            where ca.data_primeira_etapa != ''
+            and ca.data_segunda_etapa != ''
+            and ca.data_terceira_etapa != '';
+            """
+            , nativeQuery = true)
+    Map<String, Object> countCasaisTerceiraEtapa();
+
+    @Query(value =
+        """
+        SELECT
+            c1.apelido AS apelidoEle, c1.telefone AS telefoneEle,
+            c2.apelido AS apelidoEla, c2.telefone AS telefoneEla,
+            ca.data_casamento_civil AS casamentoCivil,
+            ca.is_active
+        FROM casal ca
+        JOIN conjuge c1 ON ca.ele_id = c1.id
+        JOIN conjuge c2 ON ca.ela_id = c2.id
+        where ca.data_casamento_religioso = ''
+        order by apelidoEle;
+        """, nativeQuery = true)
+    List<Map<String, Object>> getCasaisSemSacramentoDoMatrimonio();
+
+    @Query(value =
+            """
+            SELECT
+                count(1) as count_sem_sacramento
+            FROM casal ca
+            JOIN conjuge c1 ON ca.ele_id = c1.id
+            JOIN conjuge c2 ON ca.ela_id = c2.id
+            where ca.data_casamento_religioso = '';
+            """, nativeQuery = true)
+    Map<String, Object> countCasaisSemSacramentoDoMatrimonio();
+
+    @Query(value =
+        """ 
+        SELECT
+            c1.apelido AS apelidoEle, c1.telefone AS telefoneEle,
+            c2.apelido AS apelidoEla, c2.telefone AS telefoneEla,
+            ca.data_primeira_etapa,
+            ca.data_segunda_etapa,
+            ca.data_terceira_etapa,
+            ca.is_active 
+        FROM casal ca
+        JOIN conjuge c1 ON ca.ele_id = c1.id
+        JOIN conjuge c2 ON ca.ela_id = c2.id
+        where ca.data_primeira_etapa != ''
+        AND ca.is_active = FALSE
+        ORDER BY apelidoEle;
+        """, nativeQuery = true)
+    List<Map<String, Object>> getInactiveCouples();
+
+    @Query(value =
+            """ 
+            SELECT
+                count(1) as total_inactive_couples
+            FROM casal ca
+            JOIN conjuge c1 ON ca.ele_id = c1.id
+            JOIN conjuge c2 ON ca.ela_id = c2.id
+            where ca.data_primeira_etapa != ''
+            AND ca.is_active = FALSE;
+            """, nativeQuery = true)
+    Map<String, Object> countInactiveCouples();
+
+    @Query(value =
+            """ 
+            SELECT
+                c1.apelido AS apelidoEle, c1.telefone AS telefoneEle,
+                c2.apelido AS apelidoEla, c2.telefone AS telefoneEla,
+                ca.data_primeira_etapa,
+                ca.data_segunda_etapa,
+                ca.data_terceira_etapa,
+                ca.is_active 
+            FROM casal ca
+            JOIN conjuge c1 ON ca.ele_id = c1.id
+            JOIN conjuge c2 ON ca.ela_id = c2.id
+            where ca.data_primeira_etapa != ''
+            AND ca.is_active = true
+            order by apelidoEle;
+            """, nativeQuery = true)
+    List<Map<String, Object>> getActiveCouples();
+
+    @Query(value =
+    """
+    SELECT
+        count(CASE WHEN ca.data_primeira_etapa != '' THEN 1 END) AS count_primeira_etapa,
+        count(CASE WHEN ca.data_segunda_etapa != '' THEN 1 END) AS count_segunda_etapa,
+        count(CASE WHEN ca.data_terceira_etapa != '' THEN 1 END) AS count_terceira_etapa,
+        count(1) as total_active_couples
+    FROM casal ca
+    JOIN conjuge c1 ON ca.ele_id = c1.id
+    JOIN conjuge c2 ON ca.ela_id = c2.id
+    WHERE ca.is_active = true;
+    """, nativeQuery = true)
+    Map<String, Object> countActiveCouples();
+
 }

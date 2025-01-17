@@ -9,56 +9,6 @@ import java.util.UUID;
 @Controller
 public class TelasController {
 
-    @GetMapping("/v1/diocese/form")
-    public String showCreateDioceseForm() {
-        return "create_diocese";
-    }
-
-//    @GetMapping("/v1/diocese/editar/{id}")
-//    public String updateDioceseForm() {
-//        return "update_diocese";
-//    }
-
-    @GetMapping("/v1/diocese/view")
-    public String showSeeDioceseForm() {
-        return "diocese_view";
-    }
-
-    @GetMapping("/v1/setor/form")
-    public String showCreateSetorForm() {
-        return "create_setor";
-    }
-
-    @GetMapping("/v1/setor/view")
-    public String showSeeSetorForm() {
-        return "setor_view";
-    }
-
-    @GetMapping("/v1/relatorios/casais-para-segunda-etapa")
-    public String showRelatorioCasaisParaSegundaEtapa() {
-        return "casais_para_segunda_etapa";
-    }
-
-    @GetMapping("/v1/relatorios/casais-para-terceira-etapa")
-    public String showRelatorioCasaisParaTerceiraEtapa() {
-        return "casais_para_terceira_etapa";
-    }
-
-    @GetMapping("/v1/relatorios/casais-sem-sacramento")
-    public String showRelatorioCasaisSemMatrimonio() {
-        return "casais_sem_matrimonio";
-    }
-
-    @GetMapping("/v1/paroquia/form")
-    public String showCreateParoquiaForm() {
-        return "create_paroquia";
-    }
-
-    @GetMapping("/v1/paroquia/view")
-    public String showSeeParoquiaForm() {
-        return "paroquia_view";
-    }
-
     @GetMapping("/v1/casal/form")
     public String showCreateCasalForm() {
         return "create_casal";
@@ -86,11 +36,6 @@ public class TelasController {
 //    public String showViewCasalForm(@PathVariable("id") UUID id) {
 //        return "casal_visualizacao";
 //    }
-//
-//    @GetMapping("/v1/diocese/editar/{id}")
-//    public String showUpdateDiocese(@PathVariable("id") UUID id) {
-//        return "update_diocese";
-//    }
 
     @GetMapping("/v1/login")
     public String showLogin() {
@@ -102,11 +47,6 @@ public class TelasController {
         return "home";
     }
 
-    @GetMapping("/v1/navbar")
-    public String showNavBar() {
-        return "novo-navbar";
-    }
-
     @GetMapping("/v1/js")
     public String showJs() {
         return "/scripts/functions";
@@ -116,7 +56,6 @@ public class TelasController {
     public String showFooter() {
         return "footer";
     }
-
 
 //    @GetMapping("/v1/usuario/criar")
 //    public String showUsuarioCreate() {

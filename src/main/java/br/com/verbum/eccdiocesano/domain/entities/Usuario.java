@@ -33,15 +33,6 @@ public class Usuario extends BaseEntity implements UserDetails {
     private String telefone;
     private String papel;
     private Boolean isActive;
-    @ManyToOne
-    @JoinColumn(name = "diocese_id")
-    private Diocese diocese;
-    @ManyToOne
-    @JoinColumn(name = "setor_id")
-    private Setor setor;
-    @ManyToOne
-    @JoinColumn(name = "paroquia_id")
-    private Paroquia paroquia;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

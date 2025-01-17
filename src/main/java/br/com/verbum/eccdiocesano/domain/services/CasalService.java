@@ -1,12 +1,13 @@
 package br.com.verbum.eccdiocesano.domain.services;
 
-import br.com.verbum.eccdiocesano.domain.repository.*;
+import br.com.verbum.eccdiocesano.domain.repository.CasalRepository;
+import br.com.verbum.eccdiocesano.domain.repository.ConjugeRepository;
 import br.com.verbum.eccdiocesano.rest.dtos.CasalDto;
-import br.com.verbum.eccdiocesano.rest.mappers.*;
+import br.com.verbum.eccdiocesano.rest.mappers.CasalMapper;
+import br.com.verbum.eccdiocesano.rest.mappers.ConjugeMapper;
+import br.com.verbum.eccdiocesano.rest.mappers.CountMapper;
 import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,22 +24,60 @@ public class CasalService {
     private final ConjugeRepository conjugeRepository;
     private final ConjugeMapper conjugeMapper;
     private final CasalMapper mapper;
-    private final ParoquiaMapper paroquiaMapper;
-    private final SetorMapper setorMapper;
-    private final DioceseMapper dioceseMapper;
-    private final ParoquiaRepository paroquiaRepository;
-    private final SetorRepository setorRepository;
-    private final DioceseRepository dioceseRepository;
+    private final CountMapper countMapper;
     private final PdfService pdfService;
+
+    private final static String PAROQUIA_DO_ROSARIO = "Nossa Senhora do Rosário";
 
     @Transactional
     public ResponseEntity<CasalDto> createCasal(CasalDto casalDto) {
 
-        var existingCouple = repository.findCasalByEleCpfAndElaCpf(casalDto.getEle().getCpf(), casalDto.getEla().getCpf());
+        var existingCouple = repository.findCasalByEleTelefoneAndElaTelefone(casalDto.getEle().getTelefone(), casalDto.getEla().getTelefone());
         if (existingCouple.isPresent()) {
             throw new EntityExistsException("Já existe o cadastro para este casal");
         }
 
+        var saveEle = conjugeRepository.save(conjugeMapper.mapConjugeToEntity(casalDto.getEle())).getId();
+        var saveEla = conjugeRepository.save(conjugeMapper.mapConjugeToEntity(casalDto.getEla())).getId();
+
+        var eleId = conjugeRepository.findById(saveEle).orElseThrow();
+        var elaId = conjugeRepository.findById(saveEla).orElseThrow();
+
+        var mappedCasal = mapper.mapToEntity(casalDto);
+        mappedCasal.setEle(eleId);
+        mappedCasal.setEla(elaId);
+        mappedCasal.setCreatedAt(OffsetDateTime.now());
+        mappedCasal.setParoquiaEcc(casalDto.getParoquiaEcc() == null ? PAROQUIA_DO_ROSARIO : casalDto.getParoquiaEcc());
+        mappedCasal.setParoquiaAtual(PAROQUIA_DO_ROSARIO);
+
+        var conjuge1 = mappedCasal.getEle();
+        var conjuge2 = mappedCasal.getEla();
+
+        conjuge1.setCasal(mappedCasal);
+        conjuge2.setCasal(mappedCasal);
+        conjuge1.setCreatedAt(OffsetDateTime.now());
+        conjuge2.setCreatedAt(OffsetDateTime.now());
+
+        var isActive = conjuge1.getDataFalecimento().isBlank() && conjuge2.getDataFalecimento().isBlank() && mappedCasal.getIsActive();
+        conjuge1.setIsActive(isActive);
+        conjuge2.setIsActive(isActive);
+        mappedCasal.setIsActive(isActive);
+
+        conjugeRepository.save(conjuge1);
+        conjugeRepository.save(conjuge2);
+
+        return ResponseEntity.ok(mapper.mapToDto(repository.save(mappedCasal)));
+    }
+
+    public ResponseEntity<CasalDto> findById(UUID casalId) {
+
+        var casal = repository.findById(casalId).orElseThrow();
+
+        return ResponseEntity.ok(mapper.mapToDto(casal));
+    }
+
+    @Transactional
+    public ResponseEntity<CasalDto> updateCasal(UUID casalId, CasalDto casalDto) {
         var ele = conjugeRepository.save(conjugeMapper.mapConjugeToEntity(casalDto.getEle())).getId();
         var ela = conjugeRepository.save(conjugeMapper.mapConjugeToEntity(casalDto.getEla())).getId();
 
@@ -48,122 +87,72 @@ public class CasalService {
         var mappedCasal = mapper.mapToEntity(casalDto);
         mappedCasal.setEle(eleId);
         mappedCasal.setEla(elaId);
-        mappedCasal.setParoquiaEcc(paroquiaRepository.findById(casalDto.getParoquiaEcc()).orElseThrow());
-        mappedCasal.setParoquiaAtual(paroquiaRepository.findById(casalDto.getParoquiaAtual()).orElseThrow());
-        mappedCasal.setSetorial(setorRepository.findById(casalDto.getIdSetor()).orElseThrow());
-        mappedCasal.setDiocese(dioceseRepository.findById(casalDto.getIdDiocese()).orElseThrow());
-        mappedCasal.setCreatedAt(OffsetDateTime.now());
 
-        var conjuge1 = mappedCasal.getEle();
-        var conjuge2 = mappedCasal.getEla();
+        mappedCasal.setId(casalId);
+        mappedCasal.setUpdatedAt(OffsetDateTime.now());
 
-        conjuge1.setCasal(mappedCasal);
-        conjuge2.setCasal(mappedCasal);
-        conjuge1.setCreatedAt(OffsetDateTime.now());
-        conjuge2.setCreatedAt(OffsetDateTime.now());
-        conjuge1.setIsActive(mappedCasal.getIsActive());
-        conjuge2.setIsActive(mappedCasal.getIsActive());
-
-        conjugeRepository.save(conjuge1);
-        conjugeRepository.save(conjuge2);
-
-        return ResponseEntity.ok(mapper.mapToDto(repository.save(mappedCasal)));
-    }
-
-    public ResponseEntity<CasalDto> findById(UUID dioceseId) {
-
-        var casal = repository.findById(dioceseId).orElseThrow();
-
-        return ResponseEntity.ok(mapper.mapToDto(casal));
-    }
-
-    @Transactional
-    public ResponseEntity<CasalDto> updateCasal(UUID casalId, CasalDto casalDto) {
-//        var logger = LoggerFactory.getLogger(CasalService.class);
-//
-//        var casal = repository.findById(casalId).orElseThrow(() -> {
-//            logger.error("Diocese with ID {} not found", casalId);
-//            return new EntityNotFoundException("Diocese not found");
-//        });
-//
-//        Map<String, Runnable> actions = new HashMap<>();
-//        actions.put("nomeEsposo", () -> casal.getEle().setNome(Objects.toString(parameters.get("nomeEsposo"))));
-//        actions.put("nomeEsposa", () -> casal.getEla().setNome(Objects.toString(parameters.get("nomeEsposa"))));
-//        actions.put("dataCasamentoReligioso", () -> casal.setDataCasamentoReligioso(Objects.toString(parameters.get("dataCasamentoReligioso"))));
-//        actions.put("dataCasamentoCivil", () -> casal.setDataCasamentoCivil(Objects.toString(parameters.get("dataCasamentoCivil"))));
-//        actions.put("endereco", () -> casal.setEndereco(Objects.toString(parameters.get("endereco"))));
-//        actions.put("bairro", () -> casal.setBairro(Objects.toString(parameters.get("bairro"))));
-//        actions.put("cidade", () -> casal.setCidade(Objects.toString(parameters.get("cidade"))));
-//        actions.put("estado", () -> casal.setEstado(Objects.toString(parameters.get("estado"))));
-//        actions.put("paroquiaEcc", () -> casal.setParoquiaEcc(paroquiaMapper.mapToEntity((ParoquiaDto) parameters.get("paroquiaEcc"))));
-//        actions.put("paroquiaAtual", () -> casal.setParoquiaAtual(paroquiaMapper.mapToEntity((ParoquiaDto) parameters.get("paroquiaAtual"))));
-//        actions.put("idSetor", () -> casal.setSetorial(setorMapper.mapToEntity((SetorDto) parameters.get("idSetor"))));
-//        actions.put("idDiocese", () -> casal.setDiocese(dioceseMapper.mapToEntity((DioceseDto) parameters.get("idDiocese"))));
-//        actions.put("dataPrimeiraEtapa", () -> casal.setDataPrimeiraEtapa(Objects.toString(parameters.get("dataPrimeiraEtapa"))));
-//        actions.put("dataSegundaEtapa", () -> casal.setDataSegundaEtapa(Objects.toString(parameters.get("dataSegundaEtapa"))));
-//        actions.put("dataTerceiraEtapa", () -> casal.setDataTerceiraEtapa(Objects.toString(parameters.get("dataTerceiraEtapa"))));
-//        actions.put("isActive", () -> casal.setIsActive(Boolean.parseBoolean(Objects.toString(parameters.get("isActive")))));
-//
-//        parameters.forEach((key, value) -> {
-//            Runnable action = actions.get(key);
-//            if (action != null) {
-//                action.run();
-//            }
-//        });
-
-//        var ele = conjugeRepository.save(conjugeMapper.mapConjugeToEntity(casalDto.getEle())).getId();
-//        var ela = conjugeRepository.save(conjugeMapper.mapConjugeToEntity(casalDto.getEla())).getId();
-//
-//        var eleId = conjugeRepository.findById(ele).orElseThrow();
-//        var elaId = conjugeRepository.findById(ela).orElseThrow();
-
-        var casal = mapper.mapToEntity(casalDto);
-        casal.setId(casalId);
-        casal.setUpdatedAt(OffsetDateTime.now());
-
-        var updatedCasal = repository.save(casal);
+        var updatedCasal = repository.save(mappedCasal);
 
         return ResponseEntity.ok(mapper.mapToDto(updatedCasal));
     }
 
+    @Transactional
     public void deleteCasal(UUID casalId) {
-        var logger = LoggerFactory.getLogger(DioceseService.class);
-
-        var casal = repository.findById(casalId).orElseThrow(() -> {
-            logger.error("Casal with ID {} not found", casalId);
-            return new EntityNotFoundException("Casal not found");
-        });
-
+        var casal = repository.findById(casalId).orElseThrow();
+        conjugeRepository.deleteAllByCasalId(casalId);
         repository.delete(casal);
     }
 
     public ResponseEntity<Iterable<CasalDto>> findAll(boolean isActive) {
         var casais = repository.findAllByIsActive(isActive);
-
         return ResponseEntity.ok(mapper.mapToDto(casais));
     }
 
-    public byte[] findAllPrimeiraEtapaAndParoquia(UUID paroquiaId) throws IOException {
-        var casais = repository.getCasaisPrimeiraEtapaPorParoquia(paroquiaId);
-
+    public byte[] findAllPrimeiraEtapa() throws IOException {
+        var casais = repository.getCasaisPrimeiraEtapa();
+        var countCasais = countMapper.mapFromQueryCountCasais(repository.countCasaisPrimeiraEtapa());
         var listaCasais = mapper.mapFromQuerySteps(casais);
 
-        return pdfService.generateCouplesFormPdf(listaCasais, listaCasais.get(0).getParoquiaNome(), "Relatório de Casais para Segunda Etapa");
+        return pdfService.generateCouplesFormPdf(listaCasais, countCasais,"Relatório de Casais ativos apenas com Primeira Etapa");
     }
 
-    public byte[] findAllSegundaEtapaAndParoquia(UUID paroquiaId) throws IOException {
-        var casais = repository.getCasaisSegundaEtapaPorParoquia(paroquiaId);
-
+    public byte[] findAllSegundaEtapa() throws IOException {
+        var casais = repository.getCasaisSegundaEtapa();
+        var countCasais = countMapper.mapFromQueryCountCasais(repository.countCasaisSegundaEtapa());
         var listaCasais = mapper.mapFromQuerySteps(casais);
 
-        return pdfService.generateCouplesFormPdf(listaCasais, listaCasais.get(0).getParoquiaNome(), "Relatório de Casais para Terceira Etapa");
+        return pdfService.generateCouplesFormPdf(listaCasais, countCasais, "Relatório de Casais ativos com Primeira e Segunda Etapas");
     }
 
-    public byte[] findAllCouplesWithoutMatrimonySacrament(UUID paroquiaId) throws IOException {
-        var casais = repository.getCasaisSemSacramentoDoMatrimonio(paroquiaId);
+    public byte[] findAllTerceiraEtapa() throws IOException {
+        var casais = repository.getCasaisTerceiraEtapa();
+        var countCasais = countMapper.mapFromQueryCountCasais(repository.countCasaisTerceiraEtapa());
+        var listaCasais = mapper.mapFromQuerySteps(casais);
 
+        return pdfService.generateCouplesFormPdf(listaCasais, countCasais, "Relatório de Casais ativos com as Três Etapas");
+    }
+
+    public byte[] getInactiveCouples() throws IOException {
+        var casais = repository.getInactiveCouples();
+        var countCasais = countMapper.mapFromQueryCountCasais(repository.countInactiveCouples());
+        var listaCasais = mapper.mapFromQuerySteps(casais);
+
+        return pdfService.generateCouplesFormPdf(listaCasais, countCasais, "Relatório de Casais Inativos");
+    }
+
+    public byte[] getActiveCouples() throws IOException {
+        var casais = repository.getActiveCouples();
+        var countCasais = countMapper.mapFromQueryCountCasais(repository.countActiveCouples());
+        var listaCasais = mapper.mapFromQuerySteps(casais);
+
+        return pdfService.generateCouplesFormPdf(listaCasais, countCasais, "Relatório de Casais Ativos");
+    }
+
+    public byte[] findAllCouplesWithoutMatrimonySacrament() throws IOException {
+        var casais = repository.getCasaisSemSacramentoDoMatrimonio();
+        var countCasais = countMapper.mapFromQueryCountCasais(repository.countCasaisSemSacramentoDoMatrimonio());
         var listaCasais = mapper.mapFromQueryWithoutSacrament(casais);
 
-        return pdfService.generateCouplesWithoutSacrament(listaCasais, listaCasais.get(0).getParoquiaNome());
+        return pdfService.generateCouplesWithoutSacrament(listaCasais, countCasais);
     }
 }

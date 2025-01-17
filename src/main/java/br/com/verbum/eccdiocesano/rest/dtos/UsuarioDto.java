@@ -16,7 +16,4 @@ public class UsuarioDto {
     private String senha;
     private String telefone;
     private String papel;
-    private UUID dioceseId;
-    private UUID setorialId;
-    private UUID paroquiaId;
 }

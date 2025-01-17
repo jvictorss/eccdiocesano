@@ -21,6 +21,5 @@ public interface ConjugeRepository extends BaseRepository<Conjuge> {
 
     // query escrita para procurar casais que foram transferidos;
 
-    @Query(value = "UPDATE conjuge SET casal_id = ?1 WHERE id IN ?2", nativeQuery = true)
-    void updateCasalId(UUID casalId, List<UUID> conjugeIds);
+    void deleteAllByCasalId(UUID casalId);
 }

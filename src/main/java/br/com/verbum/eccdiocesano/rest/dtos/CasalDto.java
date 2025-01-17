@@ -21,10 +21,8 @@ public class CasalDto {
     @NotNull private String bairro;
     @NotNull private String cidade;
     @NotNull private String estado;
-    @NotNull private UUID paroquiaEcc;
-    @NotNull private UUID paroquiaAtual;
-    @NotNull private UUID idSetor;
-    @NotNull private UUID idDiocese;
+    private String paroquiaEcc;
+    private String paroquiaAtual;
     @NotNull private String dataPrimeiraEtapa;
     private String dataSegundaEtapa;
     private String dataTerceiraEtapa;
