@@ -14,39 +14,39 @@
             <div class="container-fluid">
                 <div class="container">
                     <a class="navbar-brand" href="/verbum-ecc/v1/home">
-                        ECC Diocesano
+                        ECC Nossa Senhora do Rosário
                     </a></div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Diocese
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" onclick="viewDioceses()">Ver Diocese</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Setoriais
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" onclick="viewSetores()">Ver Setoriais</a></li>
-                                <li><a class="dropdown-item" onclick="createSetor()">Criar Setorial</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Paróquia
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" onclick="viewParoquias()">Ver Paróquias</a></li>
-                                <li><a class="dropdown-item" onclick="createParoquia()">Criar Paróquia</a></li>
-                            </ul>
-                        </li>
+<!--                        <li class="nav-item dropdown">-->
+<!--                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                                Diocese-->
+<!--                            </a>-->
+<!--                            <ul class="dropdown-menu">-->
+<!--                                <li><a class="dropdown-item" onclick="viewDioceses()">Ver Diocese</a></li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item dropdown">-->
+<!--                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                                Setoriais-->
+<!--                            </a>-->
+<!--                            <ul class="dropdown-menu">-->
+<!--                                <li><a class="dropdown-item" onclick="viewSetores()">Ver Setoriais</a></li>-->
+<!--                                <li><a class="dropdown-item" onclick="createSetor()">Criar Setorial</a></li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item dropdown">-->
+<!--                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                                Paróquia-->
+<!--                            </a>-->
+<!--                            <ul class="dropdown-menu">-->
+<!--                                <li><a class="dropdown-item" onclick="viewParoquias()">Ver Paróquias</a></li>-->
+<!--                                <li><a class="dropdown-item" onclick="createParoquia()">Criar Paróquia</a></li>-->
+<!--                            </ul>-->
+<!--                        </li>-->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Casais
@@ -62,9 +62,12 @@
                                 Relatórios
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" onclick="casaisParaSegundaEtapa()">Casais para Segunda Etapa</a></li>
-                                <li><a class="dropdown-item" onclick="casaisParaTerceiraEtapa()">Casais para Terceira Etapa</a></li>
-                                <li><a class="dropdown-item" onclick="qtdCasaisSemMatrimonio()">Casais Sem Matrimônio</a></li>
+                                <li><a class="dropdown-item" onclick="casaisApenasComPrimeiraEtapa()">Casais com Primeira Etapa</a></li>
+                                <li><a class="dropdown-item" onclick="casaisComSegundaEtapa()">Casais com Segunda Etapa</a></li>
+                                <li><a class="dropdown-item" onclick="casaisComTerceiraEtapa()">Casais com Terceira Etapa</a></li>
+                                <li><a class="dropdown-item" onclick="casaisSemMatrimonio()">Casais Sem Matrimônio</a></li>
+                                <li><a class="dropdown-item" onclick="casaisAtivos()">Casais Ativos</a></li>
+                                <li><a class="dropdown-item" onclick="casaisInativos()">Casais Inativos</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">

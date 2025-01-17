@@ -26,19 +26,19 @@
             </div>
             <div>
                 <label for="telefoneEsposo">Telefone do Esposo:</label>
-                <input type="text" id="telefoneEsposo" placeholder="No formato (87)99999-9999" required />
+                <input type="text" id="telefoneEsposo" placeholder="No formato (87)99999-9999, apenas números" required />
             </div>
             <div>
                 <label for="emailEsposo">Email do Esposo:</label>
-                <input type="email" id="emailEsposo" required />
-            </div>
-            <div>
-                <label for="cpfEsposo">CPF do Esposo:</label>
-                <input type="text" id="cpfEsposo" required />
+                <input type="email" id="emailEsposo" />
             </div>
             <div>
                 <label for="dataNascimentoEsposo">Data de Nascimento do Esposo:</label>
                 <input type="date" id="dataNascimentoEsposo" required />
+            </div>
+            <div>
+                <label for="dataFalecimentoEsposo">Se o esposo tiver FALECIDO, digite a data do óbito abaixo:</label>
+                <input type="date" id="dataFalecimentoEsposo" />
             </div>
         </div>
         <h3>Dados Ela</h3>
@@ -53,19 +53,19 @@
             </div>
             <div>
                 <label for="telefoneEsposa">Telefone da Esposa:</label>
-                <input type="text" id="telefoneEsposa" placeholder="No formato (87)99999-9999" required />
+                <input type="text" id="telefoneEsposa" placeholder="No formato (87)99999-9999, apenas números" required />
             </div>
             <div>
                 <label for="emailEsposa">Email da Esposa:</label>
-                <input type="email" id="emailEsposa" required />
-            </div>
-            <div>
-                <label for="cpfEsposa">CPF da Esposa:</label>
-                <input type="text" id="cpfEsposa" required />
+                <input type="email" id="emailEsposa" />
             </div>
             <div>
                 <label for="dataNascimentoEsposa">Data de Nascimento da Esposa:</label>
                 <input type="date" id="dataNascimentoEsposa" required />
+            </div>
+            <div>
+                <label for="dataFalecimentoEsposa">Se a esposa tiver FALECIDO, digite a data do óbito abaixo:</label>
+                <input type="date" id="dataFalecimentoEsposa" />
             </div>
         </div>
         <h3>Dados do casal</h3>
@@ -101,32 +101,6 @@
         </div>
         <div class="grid-section">
             <div>
-                <label for="paroquiaEcc">Paróquia ECC:</label>
-                <select id="paroquiaEcc" required>
-                    <option value="">Selecione uma paróquia</option>
-                </select>
-            </div>
-            <div>
-                <label for="paroquiaAtual">Paróquia Atual:</label>
-                <select id="paroquiaAtual" required>
-                    <option value="">Selecione uma paróquia</option>
-                </select>
-            </div>
-            <div>
-                <label for="setor">Setorial:</label>
-                <select id="setor" required>
-                    <option value="">Selecione um setorial</option>
-                </select>
-            </div>
-            <div>
-                <label for="diocese">Diocese:</label>
-                <select id="diocese" required>
-                    <option value="">Selecione uma diocese</option>
-                </select>
-            </div>
-        </div>
-        <div class="grid-section">
-            <div>
                 <label for="dataPrimeiraEtapa">Data da Primeira Etapa:</label>
                 <input type="date" id="dataPrimeiraEtapa" required />
             </div>
@@ -139,7 +113,11 @@
                 <input type="date" id="dataTerceiraEtapa" />
             </div>
             <div>
-                <label for="isActive">Ativo:</label>
+                <label for="paroquiaEcc">Paroquia que fez ECC:</label>
+                <input type="text" id="paroquiaEcc" placeholder="Paróquia de origem se o casal foi transferido" />
+            </div>
+            <div>
+                <label for="isActive" style="display: block; text-align: center;">O casal está ativo?</label>
                 <input type="checkbox" id="isActive" />
             </div>
         </div>
@@ -152,50 +130,6 @@
 </body>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 <script>
-    async function fetchDioceses() {
-        try {
-            const response = await fetch('/verbum-ecc/v1/diocese/all/isActive=true');
-            if (response.ok) {
-                const dioceses = await response.json();
-                const select = document.getElementById('diocese');
-                dioceses.forEach(diocese => {
-                    const option = document.createElement('option');
-                    option.value = diocese.id;
-                    option.textContent = diocese.nome;
-                    select.appendChild(option);
-                });
-            } else {
-                console.error('Failed to fetch dioceses');
-            }
-        } catch (error) {
-            console.error('Error fetching dioceses:', error);
-        }
-    }
-
-    async function fetchParoquias() {
-        try {
-            const response = await fetch('/verbum-ecc/v1/paroquia/all/isActive=true', {
-                method: 'GET'
-            });
-
-            if (response.ok) {
-                const paroquias = await response.json();
-                const paroquiaEccSelect = document.getElementById('paroquiaEcc');
-                const paroquiaAtualSelect = document.getElementById('paroquiaAtual');
-                paroquias.forEach(paroquia => {
-                    const option = document.createElement('option');
-                    option.value = paroquia.id;
-                    option.textContent = paroquia.nome;
-                    paroquiaEccSelect.appendChild(option.cloneNode(true));
-                    paroquiaAtualSelect.appendChild(option);
-                });
-            } else {
-                console.error('Failed to fetch paróquias');
-            }
-        } catch (error) {
-            console.error('Error fetching paróquias:', error);
-        }
-    }
     async function createCasal(event) {
         event.preventDefault();
 
@@ -204,8 +138,8 @@
             apelido: document.getElementById('apelidoEsposo').value,
             telefone: document.getElementById('telefoneEsposo').value,
             email: document.getElementById('emailEsposo').value,
-            cpf: document.getElementById('cpfEsposo').value,
-            dataNascimento: document.getElementById('dataNascimentoEsposo').value
+            dataNascimento: document.getElementById('dataNascimentoEsposo').value,
+            dataFalecimento: document.getElementById('dataFalecimentoEsposo').value
         };
 
         const conjugeEla = {
@@ -213,8 +147,8 @@
             apelido: document.getElementById('apelidoEsposa').value,
             telefone: document.getElementById('telefoneEsposa').value,
             email: document.getElementById('emailEsposa').value,
-            cpf: document.getElementById('cpfEsposa').value,
-            dataNascimento: document.getElementById('dataNascimentoEsposa').value
+            dataNascimento: document.getElementById('dataNascimentoEsposa').value,
+            dataFalecimento: document.getElementById('dataFalecimentoEsposa').value
         };
 
         const casalData = {
@@ -227,9 +161,7 @@
             cidade: document.getElementById('cidade').value,
             estado: document.getElementById('estado').value,
             paroquiaEcc: document.getElementById('paroquiaEcc').value,
-            paroquiaAtual: document.getElementById('paroquiaAtual').value,
-            idSetor: document.getElementById('setor').value,
-            idDiocese: document.getElementById('diocese').value,
+            // paroquiaAtual: document.getElementById('paroquiaAtual').value,
             dataPrimeiraEtapa: document.getElementById('dataPrimeiraEtapa').value,
             dataSegundaEtapa: document.getElementById('dataSegundaEtapa').value,
             dataTerceiraEtapa: document.getElementById('dataTerceiraEtapa').value,
@@ -256,9 +188,5 @@
             console.error('Erro ao criar casal:', error);
         }
     }
-
-    document.addEventListener('DOMContentLoaded', fetchParoquias);
-    document.addEventListener('DOMContentLoaded', fetchDioceses);
-    document.addEventListener('DOMContentLoaded', fetchDioceses);
 </script>
 </html>

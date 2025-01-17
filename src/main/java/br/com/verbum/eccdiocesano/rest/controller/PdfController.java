@@ -9,12 +9,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -40,9 +38,9 @@ public class PdfController {
                 .body(pdfBytes);
     }
 
-    @GetMapping("/first-step/{paroquiaId}")
-    public ResponseEntity<byte[]> allFirstStep(@PathVariable UUID paroquiaId) throws IOException {
-        byte[] pdfBytes = casalService.findAllPrimeiraEtapaAndParoquia(paroquiaId);
+    @GetMapping("/first-step")
+    public ResponseEntity<byte[]> allFirstStep() throws IOException {
+        byte[] pdfBytes = casalService.findAllPrimeiraEtapa();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
@@ -53,9 +51,9 @@ public class PdfController {
                 .body(pdfBytes);
     }
 
-    @GetMapping("/second-step/{paroquiaId}")
-    public ResponseEntity<byte[]> allSecondStep(@PathVariable UUID paroquiaId) throws IOException {
-        byte[] pdfBytes = casalService.findAllSegundaEtapaAndParoquia(paroquiaId);
+    @GetMapping("/second-step")
+    public ResponseEntity<byte[]> allSecondStep() throws IOException {
+        byte[] pdfBytes = casalService.findAllSegundaEtapa();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
@@ -66,9 +64,48 @@ public class PdfController {
                 .body(pdfBytes);
     }
 
-    @GetMapping("/without-sacrament/{paroquiaId}")
-    public ResponseEntity<byte[]> allWithoutSacrament(@PathVariable UUID paroquiaId) throws IOException {
-        byte[] pdfBytes = casalService.findAllCouplesWithoutMatrimonySacrament(paroquiaId);
+    @GetMapping("/third-step")
+    public ResponseEntity<byte[]> allThirdStep() throws IOException {
+        byte[] pdfBytes = casalService.findAllTerceiraEtapa();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "casais-com-terceira-etapa.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
+    }
+
+    @GetMapping("/inactive-couples")
+    public ResponseEntity<byte[]> allInactiveCouples() throws IOException {
+        byte[] pdfBytes = casalService.getInactiveCouples();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "casais-inativos.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
+    }
+
+    @GetMapping("/active-couples")
+    public ResponseEntity<byte[]> allActiveCouples() throws IOException {
+        byte[] pdfBytes = casalService.getActiveCouples();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "casais-ativos.pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
+    }
+
+    @GetMapping("/without-sacrament")
+    public ResponseEntity<byte[]> allWithoutSacrament() throws IOException {
+        byte[] pdfBytes = casalService.findAllCouplesWithoutMatrimonySacrament();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);

@@ -18,20 +18,20 @@ public class ConjugeMapper {
         return ConjugeDto.builder()
                 .id(conjuge.getId())
                 .nome(conjuge.getNome())
-                .cpf(conjuge.getCpf())
                 .apelido(conjuge.getApelido())
                 .dataNascimento(conjuge.getDataNascimento())
                 .email(conjuge.getEmail())
                 .telefone(conjuge.getTelefone())
+                .dataFalecimento(conjuge.getDataFalecimento())
                 .build();
     }
 
     public Conjuge mapConjugeToEntity(ConjugeDto conjugeDto) {
         return Conjuge.builder()
                 .nome(conjugeDto.getNome())
-                .cpf(conjugeDto.getCpf())
                 .apelido(conjugeDto.getApelido())
                 .dataNascimento(conjugeDto.getDataNascimento())
+                .dataFalecimento(conjugeDto.getDataFalecimento())
                 .email(conjugeDto.getEmail())
                 .telefone(conjugeDto.getTelefone())
                 .updatedAt(OffsetDateTime.now())

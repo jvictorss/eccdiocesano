@@ -1,9 +1,6 @@
 package br.com.verbum.eccdiocesano.domain.services;
 
 import br.com.verbum.eccdiocesano.domain.entities.Usuario;
-import br.com.verbum.eccdiocesano.domain.repository.DioceseRepository;
-import br.com.verbum.eccdiocesano.domain.repository.ParoquiaRepository;
-import br.com.verbum.eccdiocesano.domain.repository.SetorRepository;
 import br.com.verbum.eccdiocesano.domain.repository.UsuarioRepository;
 import br.com.verbum.eccdiocesano.exception.CantSaveException;
 import br.com.verbum.eccdiocesano.exception.PasswordInvalidException;
@@ -11,9 +8,7 @@ import br.com.verbum.eccdiocesano.exception.UserNotFoundException;
 import br.com.verbum.eccdiocesano.rest.dtos.UsuarioDto;
 import br.com.verbum.eccdiocesano.rest.mappers.UsuarioMapper;
 import lombok.AllArgsConstructor;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.spi.MappingContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +23,6 @@ import static br.com.verbum.eccdiocesano.constants.Constantes.ERROR_USER_NOT_FOU
 @AllArgsConstructor
 public class UsuarioService {
     private final UsuarioRepository repository;
-    private final ParoquiaRepository paroquiaRepository;
-    private final SetorRepository setorRepository;
-    private final DioceseRepository dioceseRepository;
     private final UsuarioMapper usuarioMapper;
     private final ModelMapper mapper;
 
@@ -45,9 +37,6 @@ public class UsuarioService {
         }
 
         var mappedUsuario = usuarioMapper.mapToEntity(usuarioDto);
-        mappedUsuario.setParoquia(paroquiaRepository.findById(usuarioDto.getParoquiaId()).orElseThrow());
-        mappedUsuario.setSetor(setorRepository.findById(usuarioDto.getSetorialId()).orElseThrow());
-        mappedUsuario.setDiocese(dioceseRepository.findById(usuarioDto.getDioceseId()).orElseThrow());
         mappedUsuario.setCreatedAt(OffsetDateTime.now());
         mappedUsuario.setSenha(new BCryptPasswordEncoder().encode(usuarioDto.getSenha()));
         mappedUsuario.setIsActive(true);
@@ -70,12 +59,12 @@ public class UsuarioService {
 
     private static boolean validatePassword(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%&*]).+$";
+        var pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%&*]).+$";
 
         if (!password.matches(pattern)) {
             return false;
         }
-        String encryptedPassword = passwordEncoder.encode(password);
+        var encryptedPassword = passwordEncoder.encode(password);
         return passwordEncoder.matches(password, encryptedPassword);
     }
 

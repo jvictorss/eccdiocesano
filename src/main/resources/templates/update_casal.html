@@ -16,6 +16,8 @@
 <h1>Atualizar Cadastro de Casal</h1>
 <form onsubmit="updateCasal(event);">
     <input type="hidden" id="idCasal" th:value="${casal.id}" />
+    <input type="hidden" id="idEle" th:value="${casal.ele.id}" />
+    <input type="hidden" id="idEla" th:value="${casal.ela.id}" />
     <!-- Seção Ele -->
     <h3>Dados Ele</h3>
     <div class="grid-section">
@@ -36,12 +38,12 @@
             <input type="email" id="emailEsposo" th:value="${casal.ele.email}" required />
         </div>
         <div>
-            <label for="cpfEsposo">CPF do Esposo:</label>
-            <input type="text" id="cpfEsposo" th:value="${casal.ele.cpf}" required />
-        </div>
-        <div>
             <label for="dataNascimentoEsposo">Data de Nascimento do Esposo:</label>
             <input type="date" id="dataNascimentoEsposo" th:value="${casal.ele.dataNascimento}" required />
+        </div>
+        <div>
+            <label for="dataFalecimentoEsposo">Se o esposo tiver FALECIDO, digite a data do óbito abaixo:</label>
+            <input type="date" id="dataFalecimentoEsposo" th:value="${casal.ele.dataFalecimento}"/>
         </div>
     </div>
 
@@ -65,12 +67,12 @@
             <input type="email" id="emailEsposa" th:value="${casal.ela.email}" required />
         </div>
         <div>
-            <label for="cpfEsposa">CPF da Esposa:</label>
-            <input type="text" id="cpfEsposa" th:value="${casal.ela.cpf}" required />
-        </div>
-        <div>
             <label for="dataNascimentoEsposa">Data de Nascimento da Esposa:</label>
             <input type="date" id="dataNascimentoEsposa" th:value="${casal.ela.dataNascimento}" required />
+        </div>
+        <div>
+            <label for="dataFalecimentoEsposa">Se a esposa tiver FALECIDO, digite a data do óbito abaixo:</label>
+            <input type="date" id="dataFalecimentoEsposa" th:value="${casal.ela.dataFalecimento}"/>
         </div>
     </div>
 
@@ -107,27 +109,11 @@
     <div class="grid-section">
         <div>
             <label for="paroquiaEcc">Paróquia ECC:</label>
-            <select id="paroquiaEcc" required>
-                <option value="">Selecione uma paróquia</option>
-            </select>
+            <input type="text" id="paroquiaEcc" th:value="${casal.paroquiaEcc}" required />
         </div>
         <div>
             <label for="paroquiaAtual">Paróquia Atual:</label>
-            <select id="paroquiaAtual" required>
-                <option value="">Selecione uma paróquia</option>
-            </select>
-        </div>
-        <div>
-            <label for="setor">Setorial:</label>
-            <select id="setor" required>
-                <option value="">Selecione um setorial</option>
-            </select>
-        </div>
-        <div>
-            <label for="diocese">Diocese:</label>
-            <select id="diocese" required>
-                <option value="">Selecione uma diocese</option>
-            </select>
+            <input type="text" id="paroquiaAtual" th:value="${casal.paroquiaAtual}" required />
         </div>
     </div>
     <div class="grid-section">
@@ -157,115 +143,15 @@
 </body>
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 <script>
-
-    async function fetchDioceses() {
-        try {
-            const response = await fetch('/verbum-ecc/v1/diocese/all/isActive=true');
-            if (response.ok) {
-                const dioceses = await response.json();
-                const select = document.getElementById('diocese');
-                dioceses.forEach(diocese => {
-                    const option = document.createElement('option');
-                    option.value = diocese.id;
-                    option.textContent = diocese.nome;
-                    select.appendChild(option);
-                });
-            } else {
-                console.error('Failed to fetch dioceses');
-            }
-        } catch (error) {
-            console.error('Error fetching dioceses:', error);
-        }
-    }
-
-    async function fetchParoquias() {
-        try {
-            const response = await fetch('/verbum-ecc/v1/paroquia/all/isActive=true', {
-                method: 'GET'
-            });
-
-            if (response.ok) {
-                const paroquias = await response.json();
-                const paroquiaEccSelect = document.getElementById('paroquiaEcc');
-                const paroquiaAtualSelect = document.getElementById('paroquiaAtual');
-                paroquias.forEach(paroquia => {
-                    const option = document.createElement('option');
-                    option.value = paroquia.id;
-                    option.textContent = paroquia.nome;
-                    paroquiaEccSelect.appendChild(option.cloneNode(true));
-                    paroquiaAtualSelect.appendChild(option);
-                });
-            } else {
-                console.error('Failed to fetch paróquias');
-            }
-        } catch (error) {
-            console.error('Error fetching paróquias:', error);
-        }
-    }
-
-    async function fetchParoquiaName(paroquiaId) {
-        try {
-            const response = await fetch(`/verbum-ecc/v1/paroquia/get/${paroquiaId}`);
-            if (response.ok) {
-                const paroquia = await response.json();
-                return paroquia.nome;
-            } else {
-                console.error('Failed to fetch paróquia name');
-                return 'Unknown';
-            }
-        } catch (error) {
-            console.error('Error fetching paróquia name:', error);
-            return 'Unknown';
-        }
-    }
-
-    async function fetchSetorName(setorId) {
-        try {
-            const response = await fetch(`/verbum-ecc/v1/setorial/get/${setorId}`);
-            if (response.ok) {
-                const setor = await response.json();
-                return setor.nome;
-            } else {
-                console.error('Failed to fetch setor name');
-                return 'Unknown';
-            }
-        } catch (error) {
-            console.error('Error fetching setor name:', error);
-            return 'Unknown';
-        }
-    }
-
-    async function fetchDioceseName(dioceseId) {
-        try {
-            const response = await fetch(`/verbum-ecc/v1/diocese/get/${dioceseId}`);
-            if (response.ok) {
-                const diocese = await response.json();
-                return diocese.nome;
-            } else {
-                console.error('Failed to fetch diocese name');
-                return 'Unknown';
-            }
-        } catch (error) {
-            console.error('Error fetching diocese name:', error);
-            return 'Unknown';
-        }
-    }
-
     window.onload = async function() {
         const paroquiaEccId = /*[[${casal.paroquiaEcc}]]*/ '[[${casal.paroquiaEcc}]]';
         const paroquiaAtualId = /*[[${casal.paroquiaAtual}]]*/ '[[${casal.paroquiaAtual}]]';
-        const setorId = /*[[${casal.idSetor}]]*/ '[[${casal.idSetor}]]';
-        const dioceseId = /*[[${casal.idDiocese}]]*/ '[[${casal.idDiocese}]]';
 
         const paroquiaEccName = await fetchParoquiaName(paroquiaEccId);
         const paroquiaAtualName = await fetchParoquiaName(paroquiaAtualId);
-        const setorName = await fetchSetorName(setorId);
-        const dioceseName = await fetchDioceseName(dioceseId);
 
         document.getElementById('paroquiaEcc').value = paroquiaEccName;
         document.getElementById('paroquiaAtual').value = paroquiaAtualName;
-        document.getElementById('idSetor').value = setorName;
-        document.getElementById('idDiocese').value = dioceseName;
     };
 
     async function updateCasal(event) {
@@ -273,21 +159,23 @@
 
         const id = document.getElementById('idCasal').value;
         const conjugeEle = {
+            id: document.getElementById('idEle').value,
             nome: document.getElementById('nomeEsposo').value,
             apelido: document.getElementById('apelidoEsposo').value,
             telefone: document.getElementById('telefoneEsposo').value,
             email: document.getElementById('emailEsposo').value,
-            cpf: document.getElementById('cpfEsposo').value,
-            dataNascimento: document.getElementById('dataNascimentoEsposo').value
+            dataNascimento: document.getElementById('dataNascimentoEsposo').value,
+            dataFalecimento: document.getElementById('dataFalecimentoEsposo').value
         };
 
         const conjugeEla = {
+            id: document.getElementById('idEla').value,
             nome: document.getElementById('nomeEsposa').value,
             apelido: document.getElementById('apelidoEsposa').value,
             telefone: document.getElementById('telefoneEsposa').value,
             email: document.getElementById('emailEsposa').value,
-            cpf: document.getElementById('cpfEsposa').value,
-            dataNascimento: document.getElementById('dataNascimentoEsposa').value
+            dataNascimento: document.getElementById('dataNascimentoEsposa').value,
+            dataFalecimento: document.getElementById('dataFalecimentoEsposa').value
         };
 
         const casalData = {
@@ -301,8 +189,6 @@
             estado: document.getElementById('estado').value,
             paroquiaEcc: document.getElementById('paroquiaEcc').value,
             paroquiaAtual: document.getElementById('paroquiaAtual').value,
-            idSetor: document.getElementById('setor').value,
-            idDiocese: document.getElementById('diocese').value,
             dataPrimeiraEtapa: document.getElementById('dataPrimeiraEtapa').value,
             dataSegundaEtapa: document.getElementById('dataSegundaEtapa').value,
             dataTerceiraEtapa: document.getElementById('dataTerceiraEtapa').value,
@@ -331,14 +217,12 @@
         document.getElementById('apelidoEsposo').value = '';
         document.getElementById('telefoneEsposo').value = '';
         document.getElementById('emailEsposo').value = '';
-        document.getElementById('cpfEsposo').value = '';
         document.getElementById('dataNascimentoEsposo').value = '';
 
         document.getElementById('nomeEsposa').value = '';
         document.getElementById('apelidoEsposa').value = '';
         document.getElementById('telefoneEsposa').value = '';
         document.getElementById('emailEsposa').value = '';
-        document.getElementById('cpfEsposa').value = '';
         document.getElementById('dataNascimentoEsposa').value = '';
 
         document.getElementById('dataCasamentoReligioso').value = '';
@@ -349,8 +233,6 @@
         document.getElementById('estado').value = '';
         document.getElementById('paroquiaEcc').value = '';
         document.getElementById('paroquiaAtual').value = '';
-        document.getElementById('idSetor').value = '';
-        document.getElementById('idDiocese').value = '';
         document.getElementById('dataPrimeiraEtapa').value = '';
         document.getElementById('dataSegundaEtapa').value = '';
         document.getElementById('dataTerceiraEtapa').value = '';
@@ -358,15 +240,11 @@
     }
 
     function viewCasais() {
-        window.location.href = '/verbum-ecc/v1/casal/view';
+        window.location.href = '/verbum-ecc/v1/casal/ver-casais';
     }
 
     function cancel() {
         window.location.href = '/verbum-ecc/v1/home';
     }
-
-    document.addEventListener('DOMContentLoaded', fetchParoquias);
-    document.addEventListener('DOMContentLoaded', fetchDioceses);
-    document.addEventListener('DOMContentLoaded', fetchSetores);
 </script>
 </html>

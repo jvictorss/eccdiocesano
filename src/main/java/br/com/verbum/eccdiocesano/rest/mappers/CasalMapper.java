@@ -17,9 +17,6 @@ import static java.util.stream.Collectors.toList;
 @AllArgsConstructor
 public class CasalMapper {
 
-    private final SetorMapper setorMapper;
-    private final DioceseMapper dioceseMapper;
-
     public Casal mapToEntity(CasalDto casalDto) {
         return Casal.builder()
                 .id(casalDto.getId())
@@ -32,6 +29,8 @@ public class CasalMapper {
                 .dataPrimeiraEtapa(casalDto.getDataPrimeiraEtapa())
                 .dataSegundaEtapa(casalDto.getDataSegundaEtapa())
                 .dataTerceiraEtapa(casalDto.getDataTerceiraEtapa())
+                .paroquiaEcc(casalDto.getParoquiaEcc())
+                .paroquiaAtual(casalDto.getParoquiaAtual())
                 .isActive(casalDto.getIsActive())
                 .build();
     }
@@ -47,13 +46,11 @@ public class CasalMapper {
                 .bairro(casal.getBairro())
                 .estado(casal.getEstado())
                 .cidade(casal.getCidade())
-                .paroquiaEcc(casal.getParoquiaEcc().getId())
-                .paroquiaAtual(casal.getParoquiaAtual().getId())
-                .idSetor(setorMapper.mapToDto(casal.getSetorial()).getId())
-                .idDiocese(dioceseMapper.mapToDto(casal.getDiocese()).getId())
                 .dataPrimeiraEtapa(casal.getDataPrimeiraEtapa())
                 .dataSegundaEtapa(casal.getDataSegundaEtapa())
                 .dataTerceiraEtapa(casal.getDataTerceiraEtapa())
+                .paroquiaEcc(casal.getParoquiaEcc())
+                .paroquiaAtual(casal.getParoquiaAtual())
                 .isActive(casal.getIsActive())
                 .build();
     }
@@ -62,7 +59,6 @@ public class CasalMapper {
         return ConjugeDto.builder()
                 .id(conjuge.getId())
                 .nome(conjuge.getNome())
-                .cpf(conjuge.getCpf())
                 .apelido(conjuge.getApelido())
                 .dataNascimento(conjuge.getDataNascimento())
                 .email(conjuge.getEmail())
@@ -73,7 +69,6 @@ public class CasalMapper {
     public Conjuge mapConjugeToEntity(ConjugeDto conjugeDto) {
         return Conjuge.builder()
                 .nome(conjugeDto.getNome())
-                .cpf(conjugeDto.getCpf())
                 .dataNascimento(conjugeDto.getDataNascimento())
                 .email(conjugeDto.getEmail())
                 .telefone(conjugeDto.getTelefone())

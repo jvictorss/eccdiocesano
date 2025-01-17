@@ -11,7 +11,7 @@ public class FormatUtils {
 
     public static String formatDate(String date) {
         if (date == null || date.length() != 10) {
-            return date;
+            return "";
         }
         return String.format("%s/%s/%s", date.substring(8, 10), date.substring(5, 7), date.substring(0, 4));
     }

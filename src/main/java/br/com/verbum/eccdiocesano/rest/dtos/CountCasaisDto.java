@@ -13,6 +13,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CountCasaisDto {
 
-    private Integer qtdCasaisAtivos;
-    private Integer qtdCasaisInativos;
+    private String countPrimeiraEtapa;
+    private String countSegundaEtapa;
+    private String countTerceiraEtapa;
+    private String countSemSacramento;
+    private String totalActiveCouples;
+    private String totalInactiveCouples;
 }

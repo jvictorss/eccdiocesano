@@ -12,41 +12,22 @@
     <title>Casais Inativos</title>
     <link rel="stylesheet" type="text/css" href="/verbum-ecc/css/create_diocese.css">
     <script>
-
-        async function fetchParoquiaName(paroquiaId) {
-            try {
-                const response = await fetch(`http://localhost:8080/verbum-ecc/v1/paroquia/${paroquiaId}`);
-                if (response.ok) {
-                    const paroquia = await response.json();
-                    return paroquia.nome;
-                } else {
-                    console.error('Failed to fetch paroquia name');
-                    return 'Unknown';
-                }
-            } catch (error) {
-                console.error('Error fetching paroquia name:', error);
-                return 'Unknown';
-            }
-        }
-
-
         async function fetchCasais() {
             try {
-                const response = await fetch('http://localhost:8080/verbum-ecc/v1/casal/all?isActive=false');
+                const response = await fetch('/verbum-ecc/v1/casal/all?isActive=false');
                 if (response.ok) {
                     const casais = await response.json();
                     const tableBody = document.getElementById('casalTableBody');
                     tableBody.innerHTML = '';
 
                     for (const casal of casais) {
-                        const paroquiaName = await fetchParoquiaName(casal.paroquiaAtual);
                         const row = document.createElement('tr');
                         row.innerHTML = `
                     <td>${casal.ele.nome}</td>
                     <td>${casal.ele.apelido}</td>
                     <td>${casal.ela.nome}</td>
                     <td>${casal.ela.apelido}</td>
-                    <td>${paroquiaName}</td>
+                    <td>${casal.paroquiaAtual}</td>
                     <td>
                         <button onclick="viewCasal('${casal.id}')">Ver cadastro</button>
                         <button onclick="editarCasalPorId('${casal.id}')">Editar</button>
@@ -66,7 +47,7 @@
         async function deleteCasal(id) {
             if (confirm('Tem certeza que deseja excluir este casal?')) {
                 try {
-                    const response = await fetch(`http://localhost:8080/verbum-ecc/v1/casal/${id}`, {
+                    const response = await fetch(`/verbum-ecc/v1/casal/${id}`, {
                         method: 'DELETE'
                     });
                     if (response.ok) {
