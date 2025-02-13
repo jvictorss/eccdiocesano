@@ -3,6 +3,7 @@ package br.com.verbum.eccdiocesano.rest.controller;
 
 import br.com.verbum.eccdiocesano.domain.services.CasalService;
 import br.com.verbum.eccdiocesano.rest.dtos.CasalDto;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +28,10 @@ import java.util.UUID;
 public class CasalController {
 
     private final CasalService service;
+    private final HttpSession httpSession;
 
     @PostMapping("/create")
-    public ResponseEntity<CasalDto> createCasal(@Valid @RequestBody CasalDto casalDto) {
+    public ResponseEntity<CasalDto> createCasal(@Valid @RequestBody CasalDto casalDto, HttpSession session) {
 
         var casal = service.createCasal(casalDto);
 
